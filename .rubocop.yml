@@ -1,0 +1,25 @@
+inherit_from:
+  - https://raw.githubusercontent.com/blacklane/rubocop/master/rubocop.yml
+
+Lint/HandleExceptions:
+  Exclude:
+    - test/rails_integration_test.rb
+    - test/sinatra_integration_test.rb
+Lint/RescueException:
+  Exclude:
+    - lib/kiev/request_body_filter/json.rb
+    - lib/kiev/sidekiq/request_logger.rb
+    - lib/kiev/rack/request_logger.rb
+    - lib/kiev/json.rb
+    - test/sidekiq_test.rb
+Style/GlobalVars:
+  Exclude:
+    - test/helper.rb
+Style/GuardClause:
+  Exclude:
+    - lib/kiev/logger.rb
+Style/NestedParenthesizedCalls:
+  Exclude:
+  - spec/lib/kiev/json_spec.rb
+Style/BlockDelimiters:
+  EnforcedStyle: line_count_based

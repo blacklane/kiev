@@ -1,0 +1,15 @@
+source "https://rubygems.org"
+
+gem "oj"
+
+gem "xml-simple"
+
+gem "sinatra", "2.0.0"
+gem "sinatra-contrib"
+gem "rack-parser", :require => "rack/parser"
+
+gem "rack-test", require: false
+gem "rspec", require: false
+gem "minitest-reporters", require: false
+
+gemspec :path => "../"

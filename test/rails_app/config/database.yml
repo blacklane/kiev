@@ -1,0 +1,7 @@
+test:
+  adapter:  sqlite3
+  database: db/combustion_test.sqlite
+
+production:
+  adapter:  sqlite3
+  database: db/combustion_production.sqlite

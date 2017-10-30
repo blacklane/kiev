@@ -1,0 +1,27 @@
+sudo: false
+branches:
+  only:
+    - master
+cache:
+  - bundler
+language: ruby
+rvm:
+  - 2.3.3
+  - 2.2.3
+addons:
+  postgresql: "9.4"
+services:
+  - postgresql
+  - redis-server
+before_script:
+  - psql -c 'create database que_test;' -U postgres
+gemfile:
+  - gemfiles/que_0.12.2.gemfile
+  - gemfiles/que_0.12.3.gemfile
+  - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
+  - gemfiles/sidekiq_4.2.gemfile
+  - gemfiles/sinatra_1.4.gemfile
+  - gemfiles/sinatra_2.0.gemfile
+matrix:
+  fast_finish: true
