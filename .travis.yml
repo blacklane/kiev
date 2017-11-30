@@ -20,6 +20,7 @@ gemfile:
   - gemfiles/que_0.12.3.gemfile
   - gemfiles/rails_4.1.gemfile
   - gemfiles/rails_4.2.gemfile
+  - gemfiles/shoryuken_3.1.gemfile
   - gemfiles/sidekiq_4.2.gemfile
   - gemfiles/sinatra_1.4.gemfile
   - gemfiles/sinatra_2.0.gemfile
