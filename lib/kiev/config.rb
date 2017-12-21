@@ -39,6 +39,7 @@ module Kiev
       %w(
         client_secret
         token
+        facebook_access_token
         password
         password_confirmation
         old_password
