@@ -3,6 +3,7 @@
 require "request_store"
 require "ruby_dig"
 require_relative "request_store"
+require_relative "request_logger"
 require_relative "logger"
 require_relative "param_filter"
 require_relative "request_body_filter"

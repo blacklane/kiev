@@ -7,6 +7,7 @@ Kiev is a comprehensive logging library aimed at covering a wide range of framew
 - Rack and other Rack-based frameworks
 - Sidekiq
 - Que
+- Shoryuken
 - Her and other Faraday-based libraries
 - HTTParty
 
@@ -114,6 +115,16 @@ Add the following lines to your initializer code:
 Kiev::Sidekiq.enable
 ```
 
+### Shoryuken
+
+Add the following lines to your initializer code:
+
+```ruby
+Kiev::Shoryuken.enable
+```
+
+The name of the worker class is not logged by default. Configure [`persistent_log_fields` option](#persistent_log_fields) to include `"shoryuken_class"` if you want this.
+
 ### Que
 
 Add the following lines to your initializer code:
@@ -177,21 +188,21 @@ For web requests the Kiev middleware will log the following information by defau
 }
 ```
 
-The `params` attribute will store both query parameters and request body fields (as long as they are parseable). Sensitive fields will be filtered out - see the `#filtered_params` option.
+* `params` attribute will store both query parameters and request body fields (as long as they are parseable). Sensitive fields will be filtered out - see the `#filtered_params` option.
 
-The `request_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4).
+* `request_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4).
 
-The `request_depth` represents the position of the current request within a chain of requests. It starts with 0.
+* `request_depth` represents the position of the current request within a chain of requests. It starts with 0.
 
-The `route` attribute will be set to either the Rails route (`RootController#index`) or Sinatra route (`/`) or the path, depending on the context.
+* `route` attribute will be set to either the Rails route (`RootController#index`) or Sinatra route (`/`) or the path, depending on the context.
 
-The `request_duration` is measured in miliseconds.
+* `request_duration` is measured in miliseconds.
 
-The `body` attribute coresponds to the response body and will be logged depending on the `#log_response_body_condition` option.
+* `body` attribute coresponds to the response body and will be logged depending on the `#log_response_body_condition` option.
 
-The `tree_path` attribute can be used to follow the branching of requests within a chain of requests. It's a lexicographically sortable string.
+* `tree_path` attribute can be used to follow the branching of requests within a chain of requests. It's a lexicographically sortable string.
 
-The `tree_leaf` points out that this request is a leaf in the request chain tree structure.
+* `tree_leaf` points out that this request is a leaf in the request chain tree structure.
 
 ### Background jobs
 
@@ -421,6 +432,53 @@ Kiev does not provide facilities to log directly to ElasticSearch. This is done 
 When storing logs on disk, we recommend using Logrotate in truncate mode.
 
 You can use [jq](https://stedolan.github.io/jq/) to traverse JSON log files, when you're not running Kiev in *development mode*.
+
+## Suffixing `tree_path`
+
+Kiev is built upon the assumption that one request is handled once. This isn't always true.
+
+A practical example: multiple Amazon SQS queues subscribed to one Amazon SNS topic. You send one message to SNS and queues receive identical copies that are impossible to distinguish in the trace without any help from the outside.
+
+You can solve this by adding a fixed unique suffix inside each queue processor. Preferably a single character with an even number in the alphabet (B, D, F and so on), to maintain the notion of "asynchronous processing" used throughout Kiev.
+
+For a combination of SNS and [Shoryuken](https://github.com/phstc/shoryuken) (SQS consumer). Here's how you can use it:
+
+* Enable "Raw Message Delivery" in your SQS-to-SNS subscriptions
+* On sender, write `Kiev::SubrequestHelper.payload` into the message attributes
+* On each receiver, use `Kiev::Shoryuken::suffix_tree_path` with a unique tag, like this:
+
+  ```ruby
+  # Suffix a single worker class:
+  class MyWorker
+    include Shoryuken::Worker
+    Kiev::Shoryuken.suffix_tree_path(self, "B")
+    # ...
+  end
+
+  # Or use a suffix process-wide:
+  Shoryuken.configure_server do |config|
+    Kiev::Shoryuken.suffix_tree_path(config, "B")
+  end
+  ```
+
+Here's an example of the possble `tree_path` sequence you could get by configuring two consumers with suffixes `1` and `2` (note ordering by `tree_path`):
+
+| `tree_path` |                             Meaning                             |
+|-------------|-----------------------------------------------------------------|
+| `A`         | An entry point into the system, a synchronous request           |
+| `AB`        | Background job caused by `A` executed                           |
+| `ABA`       | Synchoronous request made from `AB`                             |
+| `ABD`       | _(Not logged by Kiev itself)_ `AB` sends out an SNS message     |
+| `ABD1`      | Message `ABD` handled by susbcriber `1`                         |
+| `ABD1A`     | Synchronous request sent by `1` when handling the message `ABD` |
+| `ABD1C`     | Synchronous request sent by `1` when handling the message `ABD` |
+| `ABD2`      | Message `ABD` handled by susbcriber `2`                         |
+| `ABD2A`     | Synchronous request sent by `2` when handling the message `ABD` |
+| `ABF`       | Another backgound job from `AB` executed                        |
+| `AD`        | Background job caused by `A` executed                           |
+| `AE`        | Synchronous request made from `A`                               |
+
+Without suffixing you won't see at a glance who made the request `ABDC` and you will have two entries for both `ABD` and `ABDA`. As different subscribers may log different fields, you might be able to tell apart `ABD`s. But both `ABDA`s could happen on the same node and be logged with the same lines of code.
 
 ## Alternatives
 
