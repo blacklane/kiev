@@ -20,7 +20,7 @@ if defined?(Rack)
 
     def request_finished(options = {})
       [:request_finished, {
-        http_host: "example.org",
+        request_host: "example.org",
         params: nil,
         ip: "127.0.0.1",
         user_agent: nil,

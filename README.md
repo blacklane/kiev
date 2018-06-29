@@ -168,7 +168,7 @@ For web requests the Kiev middleware will log the following information by defau
   "event":"request_finished",
   "level":"INFO",
   "timestamp":"2017-01-27T16:11:44.123Z",
-  "http_host":"localhost",
+  "request_host":"localhost",
   "verb":"GET",
   "path":"/",
   "params":"{\"hello\":\"world\",\"password\":\"[FILTERED]\"}",
@@ -386,7 +386,7 @@ If you want to log 499 and 50x errors in nginx, which will not be captured by Ru
 log_format kiev '{"application":"app_name", "event":"request_finished",'
   '"timestamp":"$time_iso8601", "request_id":"$http_x_request_id",'
   '"user_agent":"$http_user_agent", "status":$status,'
-  '"request_duration_seconds":$request_time, "http_host":"$host",'
+  '"request_duration_seconds":$request_time, "request_host":"$host",'
   '"verb":"$request_method", "path":"$request_uri", "tree_path": "$http_x_tree_path"}';
 
 log_format simple_log '$remote_addr - $remote_user [$time_local] '

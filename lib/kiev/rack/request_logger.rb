@@ -85,7 +85,7 @@ module Kiev
         params = ParamFilter.filter(params, config.filtered_params, config.ignored_params)
 
         data = {
-          http_host: request.host, # env["HTTP_HOST"] || env["HTTPS_HOST"],
+          request_host: request.host, # env["HTTP_HOST"] || env["HTTPS_HOST"],
           params: params.empty? ? nil : params, # env[Rack::QUERY_STRING],
           ip: request.ip, # split_http_x_forwarded_headers(env) || env["REMOTE_ADDR"]
           user_agent: env[HTTP_USER_AGENT],
