@@ -6,9 +6,8 @@ gem "sidekiq", "~> 4.2.0"
 
 gem "rack-test", require: false
 gem "rspec", require: false
-gem "minitest-reporters", require: false
+gem "minitest-reporters", "1.2.0", require: false
 
 gem "her"
 
 gemspec :path => "../"
-

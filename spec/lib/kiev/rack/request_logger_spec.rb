@@ -6,10 +6,15 @@ if defined?(Rack)
   describe Kiev::Rack::RequestLogger do
     include Rack::Test::Methods
     before do
+      header("REMOTE_ADDR", remote_addr)
+      header("X_FORWARDED_FOR", http_forwarded_for)
+
       allow(Kiev).to receive(:event)
       allow(Time).to receive(:now).and_return(Time.new(2000))
     end
 
+    let(:remote_addr) { "107.110.2.17" }
+    let(:http_forwarded_for) { "213.4.214.155" }
     let(:rack_app) { proc { [200, {}, ["body"]] } }
     let(:app) { described_class.new(rack_app) }
     let(:logger) { Kiev::Config.instance.logger }
@@ -22,7 +27,7 @@ if defined?(Rack)
       [:request_finished, {
         host: "example.org",
         params: nil,
-        ip: "127.0.0.1",
+        ip: http_forwarded_for,
         user_agent: nil,
         status: 200,
         request_duration: 0.0,

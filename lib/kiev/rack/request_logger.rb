@@ -70,6 +70,11 @@ module Kiev
         !Config.instance.ignored_rack_exceptions.include?(exception.class.name)
       end
 
+      def real_ip(request)
+        # the Rack::Request#ip is broken for ages
+        ActionDispatch::Request.new(request.env).remote_ip
+      end
+
       def form_data(request:, began_at:, status:, env:, body:, response:, exception:)
         config = Config.instance
 
@@ -87,7 +92,7 @@ module Kiev
         data = {
           host: request.host, # env["HTTP_HOST"] || env["HTTPS_HOST"],
           params: params.empty? ? nil : params, # env[Rack::QUERY_STRING],
-          ip: request.ip, # split_http_x_forwarded_headers(env) || env["REMOTE_ADDR"]
+          ip: real_ip(request),
           user_agent: env[HTTP_USER_AGENT],
           status: status,
           request_duration: ((Time.now.to_f - began_at) * 1000).round(3),

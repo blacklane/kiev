@@ -10,6 +10,6 @@ gem "rack-parser", :require => "rack/parser"
 
 gem "rack-test", require: false
 gem "rspec", require: false
-gem "minitest-reporters", require: false
+gem "minitest-reporters", "1.2.0", require: false
 
 gemspec :path => "../"

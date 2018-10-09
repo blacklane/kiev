@@ -8,6 +8,6 @@ gem "sqlite3"
 gem "combustion"
 gem "rspec", require: false
 gem "rspec-rails", require: false
-gem "minitest-reporters", require: false
+gem "minitest-reporters", "1.2.0", require: false
 
 gemspec :path => "../"

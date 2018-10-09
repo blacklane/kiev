@@ -7,20 +7,28 @@ if defined?(Rails)
     include LogHelper
 
     def test_simple_get
-      get("/")
+      remote_addr = "107.110.2.17"
+      get("/", {}, "REMOTE_ADDR": remote_addr)
       assert_equal("GET", log_first["verb"])
       assert_equal("/", log_first["path"])
       assert_equal(200, log_first["status"])
       assert_equal("www.example.com", log_first["host"])
       assert_equal("request_finished", log_first["event"])
       assert_equal("INFO", log_first["level"])
-      assert_equal("127.0.0.1", log_first["ip"])
+      assert_equal(remote_addr, log_first["ip"])
       assert_equal("root#show", log_first["route"])
       assert_equal(true, log_first["tree_leaf"])
       assert_equal("A", log_first["tree_path"])
       refute_empty(log_first["timestamp"])
       refute_empty(log_first["request_id"])
       refute_nil(log_first["request_duration"])
+    end
+
+    def test_get_with_x_forwarded_for_header
+      remote_addr = "107.110.2.17"
+      http_forwarded_for = "213.4.214.155"
+      get("/", {}, "REMOTE_ADDR": remote_addr, "HTTP_X_FORWARDED_FOR": http_forwarded_for)
+      assert_equal(http_forwarded_for, log_first["ip"])
     end
 
     def test_x_request_id

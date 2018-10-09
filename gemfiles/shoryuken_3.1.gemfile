@@ -4,6 +4,6 @@ gem "aws-sdk", "~> 2.0"
 gem "shoryuken", "~> 3.1.0"
 
 gem "rack-test", require: false
-gem "minitest-reporters", require: false
+gem "minitest-reporters", "1.2.0", require: false
 
 gemspec :path => "../"
