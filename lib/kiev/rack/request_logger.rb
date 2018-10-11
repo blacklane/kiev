@@ -71,8 +71,12 @@ module Kiev
       end
 
       def real_ip(request)
-        # the Rack::Request#ip is broken for ages
-        ActionDispatch::Request.new(request.env).remote_ip
+        # use X_FORWARDED_FOR when request comes from load_balancer/proxy
+        if request.env["X_FORWARDED_FOR"]
+          request.env["REMOTE_ADDR"] = request.env["X_FORWARDED_FOR"]
+        end
+
+        request.ip
       end
 
       def form_data(request:, began_at:, status:, env:, body:, response:, exception:)
