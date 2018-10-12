@@ -31,6 +31,13 @@ if defined?(Rails)
       assert_equal(http_forwarded_for, log_first["ip"])
     end
 
+    def test_get_with_ip_list_in_x_forwarded_for_header
+      remote_addr = "107.110.2.17"
+      http_forwarded_for = "213.4.214.153,213.4.214.154,213.4.214.155"
+      get("/", {}, "REMOTE_ADDR": remote_addr, "X_FORWARDED_FOR": http_forwarded_for)
+      assert_equal("213.4.214.153", log_first["ip"])
+    end
+
     def test_x_request_id
       get(
         "/",
