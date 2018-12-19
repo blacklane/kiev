@@ -317,6 +317,20 @@ Kiev.configure do |config|
 end
 ```
 
+### log_request_body_condition
+
+By default, Kiev doesn't log the request body of `text/xml` requests, as it this is usually very verbose.
+
+You can override this behaviour via the `log_request_body_condition` option, which should be a `proc` returning a `boolean`:
+
+```ruby
+Kiev.configure do |config|
+  config.log_request_body_condition = proc do |request, response|
+    !!(request.content_type =~ /(application|text)\/xml/)
+  end
+end
+```
+
 ### log_request_condition
 
 By default, Kiev doesn't log requests to `/ping` or `/health` or requests to assets.
@@ -377,6 +391,20 @@ get "/" do
   "hello world"
 end
 ```
+
+### request_content_type
+
+When a client doesn't set the correct request content type, the option `request_content_type`, which takes a `proc` as an argument, can help you force a particular one:
+
+```ruby
+Kiev.configure do |config|
+  config.request_content_type = proc do |request|
+    request.content_type
+  end
+end
+```
+
+This is then applied on the default `log_request_body_condition` and to filters.
 
 ## nginx
 

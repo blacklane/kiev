@@ -101,7 +101,7 @@ module Kiev
         if config.log_request_body_condition.call(request, response)
           data[:request_body] =
             RequestBodyFilter.filter(
-              request.content_type,
+              config.request_content_type.call(request),
               request.body,
               config.filtered_params,
               config.ignored_params

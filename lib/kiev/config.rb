@@ -25,7 +25,7 @@ module Kiev
     end
 
     DEFAULT_LOG_REQUEST_BODY_CONDITION = proc do |request, _response|
-      !!(request.content_type =~ /(application|text)\/xml/)
+      !!(Config.instance.request_content_type.call(request) =~ /(application|text)\/xml/)
     end
 
     DEFAULT_IGNORED_RACK_EXCEPTIONS =
@@ -74,6 +74,10 @@ module Kiev
       end
     end
 
+    DEFAULT_REQUEST_CONTENT_TYPE = proc do |request|
+      request.content_type
+    end
+
     attr_accessor :app,
                   :log_request_condition,
                   :log_request_error_condition,
@@ -84,7 +88,8 @@ module Kiev
                   :ignored_rack_exceptions,
                   :disable_default_logger,
                   :persistent_log_fields,
-                  :pre_rack_hook
+                  :pre_rack_hook,
+                  :request_content_type
 
     attr_reader :development_mode,
                 :logger,
@@ -107,6 +112,7 @@ module Kiev
       @log_level = nil
       @persistent_log_fields = []
       @pre_rack_hook = DEFAULT_PRE_RACK_HOOK
+      @request_content_type = DEFAULT_REQUEST_CONTENT_TYPE
       self.propagated_fields = {}
       update_logger_settings
     end
