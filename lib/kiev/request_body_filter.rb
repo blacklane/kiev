@@ -10,7 +10,7 @@ module Kiev
     FILTERED = "[FILTERED]"
 
     JSON_CONTENT_TYPE = %w(text/json application/json)
-    XML_CONTENT_TYPES = %w(text/xml application/xml)
+    XML_CONTENT_TYPES = %w(text/xml application/xml application/soap+xml)
     FORM_DATA_CONTENT_TYPES = %w(application/x-www-form-urlencoded multipart/form-data)
 
     def self.for_content_type(content_type)

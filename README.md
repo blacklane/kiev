@@ -331,6 +331,20 @@ Kiev.configure do |config|
 end
 ```
 
+### log_request_body_condition
+
+By default, Kiev doesn't log the request body of XML requests because they tend to be more verbose.
+
+You can override this behaviour via the `log_request_body_condition` option, which should be a `proc` returning a `boolean`:
+
+```ruby
+Kiev.configure do |config|
+  config.log_request_body_condition = proc do |request, _response|
+    !!(request.content_type =~ /(application|text)\/xml/)
+  end
+end
+```
+
 ### log_request_error_condition
 
 Kiev logs Ruby exceptions. By default, it won't log the exceptions produced by 404s.
