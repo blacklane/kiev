@@ -102,10 +102,11 @@ if defined?(Rack)
       end
 
       context "json" do
-        let(:rack_app) { proc { [404, { "Content-Type" => "application/json" }, "body"] } }
-        xit "logs body" do
+        let(:payload) { %({ "a": 1 }) }
+        let(:rack_app) { proc { [404, { "Content-Type" => "application/json" }, [payload]] } }
+        it "logs body" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 404, body: "body"))
+            .with(*request_finished(status: 404, body: payload))
         end
       end
     end
