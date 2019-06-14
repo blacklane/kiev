@@ -12,6 +12,7 @@ require_relative "version"
 require_relative "config"
 require_relative "util"
 require_relative "subrequest_helper"
+require_relative "hanami"
 
 module Kiev
   class << self

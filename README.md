@@ -107,6 +107,35 @@ end
 run(app)
 ```
 
+### Hanami
+
+Place your configuration under `config/initializers/kiev.rb`:
+
+```ruby
+require "kiev"
+
+Kiev.configure do |config|
+  config.app = :my_app
+  config.development_mode = Hanami.env?(:development)
+  config.log_path = File.join("log", "structured.log")
+end
+```
+
+Within your `MyApp::Application` file, include the `Kiev::Hanami` module, in order to register the middleware stack.
+The `include` should be added before `configure` block.
+
+```ruby
+module MyApp
+  class Application < Hanami::Application
+    include Kiev::Hanami
+
+    configure do
+      # ...
+    end
+  end
+end
+```
+
 ### Sidekiq
 
 Add the following lines to your initializer code:
