@@ -115,6 +115,15 @@ module Kiev
             full_body << str
           end
           data[:body] = full_body.join
+          if data[:body] && !data[:body].empty? && response.headers["Content-Encoding"] == "gzip"
+            begin
+              sio = StringIO.new(data[:body])
+              gz = Zlib::GzipReader.new(sio)
+              data[:body] = gz.read
+            rescue Zlib::GzipFile::Error => err
+              data[:gzip_parse_error] = err.message
+            end
+          end
         end
 
         should_log_errors = config.log_request_error_condition.call(request, response)
@@ -123,7 +132,6 @@ module Kiev
           data[:error_message] = exception.message[0..5000]
           data[:error_backtrace] = Array(exception.backtrace).join(NEW_LINE)[0..5000]
         end
-
         data
       end
 
