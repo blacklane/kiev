@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "zlib"
 
 if defined?(Rack)
   describe Kiev::Rack::RequestLogger do
@@ -121,7 +122,11 @@ if defined?(Rack)
           gz.close
           sio.string
         }
-        let(:rack_app) { proc { [404, { "Content-Type" => "application/json", "Content-Encoding" => "gzip" }, [payload]] } }
+        let(:rack_app) {
+          proc {
+            [404, { "Content-Type" => "application/json", "Content-Encoding" => "gzip" }, [payload]]
+          }
+        }
         it "logs body" do
           expect(subject).to have_received(:event)
             .with(*request_finished(status: 404, body: raw_payload))
@@ -130,7 +135,11 @@ if defined?(Rack)
 
       context "improperly encoded" do
         let(:payload) { raw_payload }
-        let(:rack_app) { proc { [404, { "Content-Type" => "application/json", "Content-Encoding" => "gzip" }, [payload]] } }
+        let(:rack_app) {
+          proc {
+            [404, { "Content-Type" => "application/json", "Content-Encoding" => "gzip" }, [payload]]
+          }
+        }
         it "logs gzip pars error" do
           expect(subject).to have_received(:event)
             .with(*request_finished(status: 404, body: raw_payload, gzip_parse_error: "not in gzip format"))
