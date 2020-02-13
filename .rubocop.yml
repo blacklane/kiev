@@ -3,8 +3,8 @@ inherit_from:
 
 Lint/HandleExceptions:
   Exclude:
-    - test/rails_integration_test.rb
-    - test/sinatra_integration_test.rb
+    - test/**/*.rb
+    - spec/**/*.rb
 Lint/RescueException:
   Exclude:
     - lib/kiev/request_body_filter/json.rb
