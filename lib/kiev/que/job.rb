@@ -27,6 +27,7 @@ module Kiev
       private
 
       NEW_LINE = "\n"
+      LOG_ERROR = "error"
 
       def kiev_run
         args = attrs[:args]
@@ -69,6 +70,7 @@ module Kiev
           data[:error_class] = error.class.name
           data[:error_message] = error.message[0..5000]
           data[:error_backtrace] = Array(error.backtrace).join(NEW_LINE)[0..5000]
+          data[:level] = LOG_ERROR
         end
 
         Kiev.event(:job_finished, data)

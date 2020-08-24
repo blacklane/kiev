@@ -13,6 +13,8 @@ module Kiev
     def_delegators(*([:@logger] + ::Logger.instance_methods(false)))
 
     DEFAULT_EVENT_NAME = "log"
+    LOG_ERROR = "error"
+    ERROR_STATUS = 500
 
     FORMATTER = proc do |severity, time, event_name, data|
       entry =
@@ -54,7 +56,10 @@ module Kiev
         entry.merge!(data)
       elsif !data.nil?
         entry[:message] = data.to_s
+        entry[:status] = ERROR_STATUS if data.to_s.downcase.include?(LOG_ERROR)
       end
+
+      entry[:level] = LOG_ERROR if entry[:status].to_i.between?(400, 599)
 
       # Save some disk space
       entry.reject! { |_, value| value.nil? }
