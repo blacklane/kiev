@@ -4,7 +4,7 @@ module Kiev
   module RequestLogger
     module Mixin
       NEW_LINE = "\n"
-      LOG_ERROR = "error"
+      LOG_ERROR = "ERROR"
 
       def wrap_request_logger(event, **data, &_block)
         began_at = Time.now

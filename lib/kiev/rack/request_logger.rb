@@ -8,7 +8,7 @@ module Kiev
       ERROR_STATUS = 500
       ERROR_HEADERS = [].freeze
       ERROR_BODY = [""].freeze
-      LOG_ERROR = "error"
+      LOG_ERROR = "ERROR"
 
       def initialize(app)
         @app = app

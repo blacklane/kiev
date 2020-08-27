@@ -13,7 +13,7 @@ module Kiev
     def_delegators(*([:@logger] + ::Logger.instance_methods(false)))
 
     DEFAULT_EVENT_NAME = "log"
-    LOG_ERROR = "error"
+    LOG_ERROR = "ERROR"
     ERROR_STATUS = 500
 
     FORMATTER = proc do |severity, time, event_name, data|

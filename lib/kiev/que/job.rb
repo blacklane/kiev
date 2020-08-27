@@ -27,7 +27,7 @@ module Kiev
       private
 
       NEW_LINE = "\n"
-      LOG_ERROR = "error"
+      LOG_ERROR = "ERROR"
 
       def kiev_run
         args = attrs[:args]
