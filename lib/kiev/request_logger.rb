@@ -4,6 +4,7 @@ module Kiev
   module RequestLogger
     module Mixin
       NEW_LINE = "\n"
+      LOG_ERROR = "ERROR"
 
       def wrap_request_logger(event, **data, &_block)
         began_at = Time.now
@@ -21,6 +22,7 @@ module Kiev
             data[:error_class] = error.class.name
             data[:error_message] = error.message[0..5000]
             data[:error_backtrace] = Array(error.backtrace).join(NEW_LINE)[0..5000]
+            data[:level] = LOG_ERROR
           end
 
           Kiev.event(event, data)

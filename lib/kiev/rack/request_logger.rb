@@ -8,6 +8,7 @@ module Kiev
       ERROR_STATUS = 500
       ERROR_HEADERS = [].freeze
       ERROR_BODY = [""].freeze
+      LOG_ERROR = "ERROR"
 
       def initialize(app)
         @app = app
@@ -96,6 +97,8 @@ module Kiev
           route: extract_route(env)
         }
 
+        data[:level] = LOG_ERROR if data[:status].to_i.between?(400, 599)
+
         if env[HTTP_X_REQUEST_START]
           data[:request_latency] = ((began_at - env[HTTP_X_REQUEST_START].to_f) * 1000).round(3)
         end
@@ -133,6 +136,7 @@ module Kiev
           data[:error_class] = exception.class.name
           data[:error_message] = exception.message[0..5000]
           data[:error_backtrace] = Array(exception.backtrace).join(NEW_LINE)[0..5000]
+          data[:level] = LOG_ERROR
         end
         data
       end
