@@ -23,6 +23,7 @@ module Kiev
           event: event_name || DEFAULT_EVENT_NAME,
           level: severity,
           timestamp: time.utc,
+          tracking_id: RequestStore.store[:tracking_id],
           request_id: RequestStore.store[:request_id],
           request_depth: RequestStore.store[:request_depth],
           tree_path: RequestStore.store[:tree_path]
@@ -93,9 +94,10 @@ module Kiev
         entry << "\n"
 
         meta = {
+          tracking_id: RequestStore.store[:tracking_id],
           request_id: RequestStore.store[:request_id],
           request_depth: RequestStore.store[:request_depth]
-        }.merge!(Hash(RequestStore.store[:payload]))
+        }.reverse_merge!(Hash(RequestStore.store[:payload]))
 
         meta.reject! { |_, value| value.nil? }
 

@@ -63,6 +63,7 @@ module Kiev
       ) << :tempfile).freeze
 
     DEFAULT_HTTP_PROPAGATED_FIELDS = {
+      tracking_id: "X-Tracking-Id",
       request_id: "X-Request-Id",
       request_depth: "X-Request-Depth",
       tree_path: "X-Tree-Path"
