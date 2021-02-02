@@ -29,12 +29,12 @@ jobs:
           - gemfiles/sinatra_1.4.gemfile
           - gemfiles/sinatra_2.0.gemfile
         allow_failures:
-          - false
+          - true
         include:
           - os: ubuntu
             ruby-version: ruby-head
             gemfile: gemfiles/rails_5.2.gemfile
-            allow_failures: true
+            allow_failures: false
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
       ALLOW_FAILURES: "${{ matrix.allow_failures }}"
