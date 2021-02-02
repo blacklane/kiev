@@ -32,7 +32,8 @@ module Kiev
 
       def tree_root?(env)
         tracking_id_header_in = to_http(:tracking_id)
-        !env[tracking_id_header_in]
+        request_id_header_in = to_http(:request_id)
+        !env[tracking_id_header_in] && !env[request_id_header_in]
       end
 
       def request_depth(env)

@@ -71,13 +71,20 @@ if defined?(Combustion)
     config.action_dispatch.show_exceptions = false
     config.consider_all_requests_local     = false
     config.active_support.test_order       = :random
-    # middleware to parse XML request body
-    config.middleware.swap(
-      ActionDispatch::ParamsParser, ActionDispatch::ParamsParser,
-      Mime::XML => proc do |raw_post|
-        Hash.from_xml(raw_post)
-      end
-    )
+    if ActionDispatch.const_defined?(:ParamsParser)
+      # middleware to parse XML request body
+      config.middleware.swap(
+        ActionDispatch::ParamsParser, ActionDispatch::ParamsParser,
+        Mime::XML => proc do |raw_post|
+          Hash.from_xml(raw_post)
+        end
+      )
+    else
+      original_parsers = ActionDispatch::Request.parameter_parsers
+      xml_parser = -> (raw_post) { Hash.from_xml(raw_post) || {} }
+      new_parsers = original_parsers.merge(xml: xml_parser)
+      ActionDispatch::Request.parameter_parsers = new_parsers
+    end
   end
 end
 
