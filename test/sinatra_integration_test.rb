@@ -72,7 +72,7 @@ if defined?(Sinatra)
     def test_data
       get("/request_data")
       assert_nil(log_first["a"])
-      assert_equal("0.1E1", log_first["b"]) # WTF?
+      assert_equal("0.1e1", log_first["b"]) # WTF?
       assert_equal("c", log_first["c"])
     end
 
@@ -85,7 +85,7 @@ if defined?(Sinatra)
       refute_empty(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal(502, log_first["status"])
     end
 
@@ -98,7 +98,7 @@ if defined?(Sinatra)
       refute_empty(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal(500, log_first["status"])
     end
 
@@ -111,7 +111,7 @@ if defined?(Sinatra)
       assert_nil(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal(403, log_first["status"])
     end
 
@@ -236,7 +236,7 @@ if defined?(Sinatra)
       refute_empty(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal(500, log_first["status"]) # because of enable :show_exceptions
     end
 
@@ -251,7 +251,7 @@ if defined?(Sinatra)
       refute_empty(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal(500, log_first["status"])
     end
   end
