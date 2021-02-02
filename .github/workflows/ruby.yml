@@ -40,6 +40,24 @@ jobs:
       ALLOW_FAILURES: "${{ matrix.allow_failures }}"
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
 
+    # Service containers to run with `container-job`
+    services:
+      redis:
+        image: redis:latest
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:9.4
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: que_test
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
@@ -50,25 +68,9 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Setup PostgreSQL
-        # You may pin to the exact commit or the version.
-        # uses: Harmon758/postgresql-action@0be19fa37850b22cb4c9bbf28a03abbf44abd863
-        uses: Harmon758/postgresql-action@v1.0.0
-        with:
-          # Version of PostgreSQL to use
-          postgresql version: "9.4"
-          # POSTGRES_DB - name for the default database that is created
-          postgresql db: "que_test" # optional, default is
-          # POSTGRES_USER - create the specified user with superuser power
-          #  postgresql user: # optional, default is
-          # POSTGRES_PASSWORD - superuser password
-          #  postgresql password: # optional, default is
-      - name: Redis Server in GitHub Actions
-        # You may pin to the exact commit or the version.
-        # uses: supercharge/redis-github-action@8dd3c86cd02fabe1bc459d55ba892a9ce91e23c6
-        uses: supercharge/redis-github-action@1.1.0
-        with:
-          # Redis version to use
-          redis-version: "latest" # optional, default is latest
+
       - name: Run tests
         run: bundle exec rake || $ALLOW_FAILURES
+        env:
+          REDIS_URL: "redis://redis/4"
+          DATABASE_URL: "postgres://postgres:@postgres/que_test"
