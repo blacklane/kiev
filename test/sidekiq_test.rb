@@ -76,8 +76,8 @@ if defined?(Sidekiq)
       assert_equal(0, log_first["request_depth"])
       assert_equal("NoMethodError", log_first["error_class"])
       assert_equal(
-        "undefined method `undefined_method' for SidekiqTest::CustomWorker:Class\nDid you mean?  undef_method",
-        log_first["error_message"]
+        "undefined method `undefined_method' for SidekiqTest::CustomWorker:Class",
+        log_first["error_message"].lines.first.chomp
       )
       refute_nil(log_first["error_backtrace"])
       assert_nil(Kiev::RequestStore.store[:request_id])

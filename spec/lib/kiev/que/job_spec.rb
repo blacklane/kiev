@@ -108,7 +108,7 @@ if defined?(::Que::Job)
       expect(log_first["request_duration"]).to be
       expect(log_first["timestamp"]).to be
       expect(log_first["error_class"]).to eq("NoMethodError")
-      expect(log_first["error_message"]).to eq("undefined method `undefined_method' for GlobalStore:Class\nDid you mean?  undef_method")
+      expect(log_first["error_message"]).to start_with("undefined method `undefined_method' for GlobalStore:Class")
       expect(log_first["error_backtrace"]).to be
       expect(Kiev::RequestStore.store[:request_id]).to be_nil
     end
