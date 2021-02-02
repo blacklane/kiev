@@ -44,6 +44,8 @@ jobs:
     services:
       redis:
         image: redis:latest
+        ports:
+          - 6379:6379
       # Label used to access the service container
       postgres:
         # Docker Hub image
@@ -53,6 +55,8 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: que_test
         # Set health checks to wait until postgres has started
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -72,5 +76,5 @@ jobs:
       - name: Run tests
         run: bundle exec rake || $ALLOW_FAILURES
         env:
-          REDIS_URL: "redis://redis/4"
-          DATABASE_URL: "postgres://postgres:@postgres/que_test"
+          REDIS_URL: "redis://localhost:6379/4"
+          DATABASE_URL: "postgres://postgres:@localhost:5432/que_test"
