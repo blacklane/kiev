@@ -1,0 +1,74 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ['2.5.1', '2.7.2', '2.6.5']
+        gemfile:
+          - gemfiles/que_0.12.2.gemfile
+          - gemfiles/que_0.12.3.gemfile
+          - gemfiles/rails_5.2.gemfile
+          - gemfiles/shoryuken_4.0.gemfile
+          - gemfiles/sidekiq_4.2.gemfile
+          - gemfiles/sinatra_1.4.gemfile
+          - gemfiles/sinatra_2.0.gemfile
+        allow_failures:
+          - false
+        include:
+          - os: ubuntu
+            ruby-version: ruby-head
+            gemfile: gemfiles/rails_5.2.gemfile
+            allow_failures: true
+    env:
+      BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+      ALLOW_FAILURES: "${{ matrix.allow_failures }}"
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+        # change this to (see https://github.com/ruby/setup-ruby#versioning):
+        # uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Setup PostgreSQL
+        # You may pin to the exact commit or the version.
+        # uses: Harmon758/postgresql-action@0be19fa37850b22cb4c9bbf28a03abbf44abd863
+        uses: Harmon758/postgresql-action@v1.0.0
+        with:
+          # Version of PostgreSQL to use
+          postgresql version: "9.4"
+          # POSTGRES_DB - name for the default database that is created
+          postgresql db: "que_test" # optional, default is
+          # POSTGRES_USER - create the specified user with superuser power
+          #  postgresql user: # optional, default is
+          # POSTGRES_PASSWORD - superuser password
+          #  postgresql password: # optional, default is
+      - name: Redis Server in GitHub Actions
+        # You may pin to the exact commit or the version.
+        # uses: supercharge/redis-github-action@8dd3c86cd02fabe1bc459d55ba892a9ce91e23c6
+        uses: supercharge/redis-github-action@1.1.0
+        with:
+          # Redis version to use
+          redis-version: "latest" # optional, default is latest
+      - name: Run tests
+        run: bundle exec rake || $ALLOW_FAILURES
