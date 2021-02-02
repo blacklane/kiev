@@ -212,6 +212,7 @@ if defined?(::Shoryuken)
                 "request_depth" => 0,
                 "timestamp" => a_string_matching(/.+/),
                 "request_id" => a_string_matching(/.+/),
+                "tracking_id" => a_string_matching(/.+/),
                 "request_duration" => (a_value > 0)
               )
             end
@@ -249,6 +250,7 @@ if defined?(::Shoryuken)
           let(:message_attributes) do
             {
               request_id: request_id,
+              tracking_id: request_id,
               tree_path: tree_path,
               request_depth: request_depth
             }

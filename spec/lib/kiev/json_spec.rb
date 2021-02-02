@@ -134,11 +134,11 @@ describe Kiev::JSON do
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
       )
     else
-      expect(Kiev::JSON.generate(data)).to eq(
+      expect(p Kiev::JSON.generate(data)).to eq(
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\u2028\u2029><&\",\"StringSpecial2\":\"/\",\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\"," \
         "\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07+00:00\"," \
-        "\"BigDecimal\":\"0.333333333333333333E0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
+        "\"BigDecimal\":\"0.333333333333333333e0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
         "\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":\"#<OpenStruct country=\\\"Australia\\\", population=20000000>\"," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"

@@ -11,8 +11,6 @@ module Kiev
     TREE_PATH = "tree_path"
 
     def initialize(subject)
-      subject[TRACKING_ID] ||= subject[REQUEST_ID]
-      subject[REQUEST_ID] = subject[TRACKING_ID]
       @subject = subject
     end
 
@@ -21,13 +19,13 @@ module Kiev
     end
 
     def tracking_id
-      self[TRACKING_ID] || SecureRandom.uuid
+      self[TRACKING_ID] || self[REQUEST_ID]  || SecureRandom.uuid
     end
 
     alias_method :request_id, :tracking_id
 
     def tree_root?
-      !self[TRACKING_ID]
+      !self[TRACKING_ID] && !self[REQUEST_ID]
     end
 
     def request_depth
