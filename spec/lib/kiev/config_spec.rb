@@ -141,6 +141,7 @@ describe Kiev::Config do
       }
       expect(subject.http_propagated_fields).to eq(http_field: "X-Field")
       expect(subject.all_http_propagated_fields).to eq(
+        tracking_id: "X-Tracking-Id",
         request_id: "Request-Id",
         request_depth: "X-Request-Depth",
         tree_path: "X-Tree-Path",
@@ -157,7 +158,7 @@ describe Kiev::Config do
       subject.jobs_propagated_fields = [:request_id, :jobs_field]
       expect(subject.jobs_propagated_fields).to eq([:jobs_field])
       expect(subject.all_jobs_propagated_fields).to eq(
-        [:request_id, :request_depth, :tree_path, :jobs_field]
+        [:tracking_id, :request_id, :request_depth, :tree_path, :jobs_field]
       )
     end
   end

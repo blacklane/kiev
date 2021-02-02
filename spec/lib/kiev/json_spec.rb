@@ -67,9 +67,9 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
         "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05T23:58:07.999+09:00\"," \
-        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.1000+00:00\"," \
+        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.999+00:00\"," \
         "\"BigDecimal\":\"0.333333333333333333\",\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333," \
-        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":{}," \
+        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":{\"table\":{\"country\":\"Australia\",\"population\":20000000}}," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
       )
@@ -97,9 +97,9 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
         "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05T23:58:07.999+09:00\"," \
-        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.1000+00:00\"," \
+        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.999+00:00\"," \
         "\"BigDecimal\":\"0.333333333333333333\",\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333," \
-        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":{}," \
+        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":{\"table\":{\"country\":\"Australia\",\"population\":20000000}}," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
       )
