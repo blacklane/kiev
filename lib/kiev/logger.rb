@@ -93,8 +93,8 @@ module Kiev
         entry << "(#{duration}ms)" if duration
         entry << "\n"
 
-        meta = RequestStore.store.slice(:trakcing_id, :request_id, :request_depth).
-          reverse_merge!(Hash(RequestStore.store[:payload]))
+        meta = RequestStore.store.slice(:trakcing_id, :request_id, :request_depth)
+                           .reverse_merge!(Hash(RequestStore.store[:payload]))
 
         meta.reject! { |_, value| value.nil? }
 

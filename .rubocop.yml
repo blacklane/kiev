@@ -1,7 +1,13 @@
 inherit_from:
   - https://raw.githubusercontent.com/blacklane/rubocop/master/rubocop.yml
 
-Lint/HandleExceptions:
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - test/rails_app/**/*.rb # auto-generated
+    - spec/**/*.rb
+    - test/**/*.rb
+Lint/SuppressedException:
   Exclude:
     - test/**/*.rb
     - spec/**/*.rb

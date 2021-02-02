@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 gem "oj"
@@ -10,4 +12,4 @@ gem "rspec", require: false
 gem "rspec-rails", require: false
 gem "minitest-reporters", require: false
 
-gemspec :path => "../"
+gemspec path: "../"
