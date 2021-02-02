@@ -77,4 +77,4 @@ jobs:
         run: bundle exec rake || $ALLOW_FAILURES
         env:
           REDIS_URL: "redis://localhost:6379/4"
-          DATABASE_URL: "postgres://postgres:@localhost:5432/que_test"
+          DATABASE_URL: "postgres://postgres:postgres@localhost:5432/que_test"
