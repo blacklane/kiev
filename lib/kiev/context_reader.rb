@@ -19,7 +19,7 @@ module Kiev
     end
 
     def tracking_id
-      self[TRACKING_ID] || self[REQUEST_ID]  || SecureRandom.uuid
+      self[TRACKING_ID] || self[REQUEST_ID] || SecureRandom.uuid
     end
 
     alias_method :request_id, :tracking_id
