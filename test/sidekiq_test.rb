@@ -68,7 +68,7 @@ if defined?(Sidekiq)
       run_sidekiq("class" => ErrorWorker.to_s)
       assert_equal("SidekiqTest::ErrorWorker", log_first["job_name"])
       assert_equal("job_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal("[\"test\"]", log_first["params"])
       refute_empty(log_first["timestamp"])
       refute_empty(log_first["request_id"])
@@ -76,7 +76,7 @@ if defined?(Sidekiq)
       assert_equal(0, log_first["request_depth"])
       assert_equal("NoMethodError", log_first["error_class"])
       assert_equal(
-        "undefined method `undefined_method' for SidekiqTest::CustomWorker:Class",
+        "undefined method `undefined_method' for SidekiqTest::CustomWorker:Class\nDid you mean?  undef_method",
         log_first["error_message"]
       )
       refute_nil(log_first["error_backtrace"])

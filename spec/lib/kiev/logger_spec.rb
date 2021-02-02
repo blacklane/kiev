@@ -2,7 +2,6 @@
 
 require "spec_helper"
 require "json"
-require "active_support/core_ext/time"
 
 describe Kiev::Logger do
   describe "FORMATTER" do
@@ -113,6 +112,7 @@ describe Kiev::Logger do
 
     it "calls #iso8601 on ActiveSupport::TimeWithZone objects" do
       skip unless defined?(ActiveSupport::TimeWithZone)
+      require "active_support/core_ext/time"
 
       subj = subject(some_timezone_object: Time.new(2015, 1, 1, 12, 13, 14, "+00:00").in_time_zone("UTC"))
       expect(subj["some_timezone_object"]).to eq("2015-01-01T12:13:14.000Z")

@@ -7,7 +7,7 @@ module Kiev
       WRAPPED = "wrapped"
 
       def call(worker, job, _queue)
-        Config.instance.all_jobs_propagated_fields.each do |key|
+        Config.instance.jobs_propagated_fields.each do |key|
           Kiev[key] = job[key.to_s]
         end
         request_store = Kiev::RequestStore.store
