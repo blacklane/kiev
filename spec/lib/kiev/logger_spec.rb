@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "json"
+require "active_support/core_ext/time"
 
 describe Kiev::Logger do
   describe "FORMATTER" do

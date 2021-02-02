@@ -99,7 +99,7 @@ if defined?(::Que::Job)
       expect(log_first["application"]).to eq("test_app")
       expect(log_first["event"]).to eq("job_finished")
       expect(log_first["job_name"]).to eq("ErrorJob")
-      expect(log_first["level"]).to eq("error")
+      expect(log_first["level"]).to eq("ERROR")
       expect(log_first["params"]).to eq("[\"Hello world!\"]")
       expect(log_first["request_depth"]).to eq(1)
       expect(log_first["request_id"]).to eq("test")
@@ -108,7 +108,7 @@ if defined?(::Que::Job)
       expect(log_first["request_duration"]).to be
       expect(log_first["timestamp"]).to be
       expect(log_first["error_class"]).to eq("NoMethodError")
-      expect(log_first["error_message"]).to eq("undefined method `undefined_method' for GlobalStore:Class")
+      expect(log_first["error_message"]).to eq("undefined method `undefined_method' for GlobalStore:Class\nDid you mean?  undef_method")
       expect(log_first["error_backtrace"]).to be
       expect(Kiev::RequestStore.store[:request_id]).to be_nil
     end
