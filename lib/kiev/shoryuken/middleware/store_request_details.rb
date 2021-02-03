@@ -8,8 +8,6 @@ module Kiev
       class StoreRequestDetails
         def call(_worker, _queue, message, _body)
           context_reader = Kiev::Shoryuken::ContextReader.new(message)
-          p Config.instance.jobs_propagated_fields
-          p Config.instance.all_jobs_propagated_fields
           Config.instance.jobs_propagated_fields.each do |key|
             Kiev[key] = context_reader[key]
           end
