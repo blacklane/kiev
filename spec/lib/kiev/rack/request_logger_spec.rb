@@ -70,7 +70,7 @@ if defined?(Rack)
       context "html" do
         let(:rack_app) { proc { [401, { "Content-Type" => "text/html" }, "body"] } }
         it "does not log body" do
-          expect(subject).to have_received(:event).with(*request_finished(status: 401, level: "error"))
+          expect(subject).to have_received(:event).with(*request_finished(status: 401, level: "ERROR"))
         end
       end
 
@@ -78,7 +78,7 @@ if defined?(Rack)
         let(:rack_app) { proc { [401, { "Content-Type" => "application/json" }, ["{\"secret\":\"not filtered\"}"]] } }
         it "logs body" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 401, body: "{\"secret\":\"not filtered\"}", level: "error"))
+            .with(*request_finished(status: 401, body: "{\"secret\":\"not filtered\"}", level: "ERROR"))
         end
       end
 
@@ -88,7 +88,7 @@ if defined?(Rack)
         end
         it "logs body" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 401, body: "<xml><secret>not filtered</secret></xml>", level: "error"))
+            .with(*request_finished(status: 401, body: "<xml><secret>not filtered</secret></xml>", level: "ERROR"))
         end
       end
     end
@@ -98,7 +98,7 @@ if defined?(Rack)
         let(:rack_app) { proc { [404, { "Content-Type": "text/html" }, "body"] } }
         it "does not log body" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 404, level: "error"))
+            .with(*request_finished(status: 404, level: "ERROR"))
         end
       end
 
@@ -107,7 +107,7 @@ if defined?(Rack)
         let(:rack_app) { proc { [404, { "Content-Type" => "application/json" }, [payload]] } }
         it "logs body" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 404, body: payload, level: "error"))
+            .with(*request_finished(status: 404, body: payload, level: "ERROR"))
         end
       end
     end
@@ -129,7 +129,7 @@ if defined?(Rack)
         }
         it "logs body" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 404, body: raw_payload, level: "error"))
+            .with(*request_finished(status: 404, body: raw_payload, level: "ERROR"))
         end
       end
 
@@ -142,7 +142,7 @@ if defined?(Rack)
         }
         it "logs gzip pars error" do
           expect(subject).to have_received(:event)
-            .with(*request_finished(status: 404, body: raw_payload, gzip_parse_error: "not in gzip format", level: "error"))
+            .with(*request_finished(status: 404, body: raw_payload, gzip_parse_error: "not in gzip format", level: "ERROR"))
         end
       end
     end

@@ -34,7 +34,7 @@ class TestApp < Sinatra::Base
   end
 
   get("/request_data") do
-    Kiev.payload(a: 0.0 / 0, b: BigDecimal.new("1"), c: "test", "c" => "c")
+    Kiev.payload(a: 0.0 / 0, b: BigDecimal("1"), c: "test", "c" => "c")
   end
 
   get("/raise_exception_handled") { raise RuntimeError, "Error" }

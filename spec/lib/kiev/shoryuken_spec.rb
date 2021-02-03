@@ -79,6 +79,7 @@ if defined?(::Shoryuken)
 
         before do
           Kiev::RequestStore.store[:request_id] = request_id
+          Kiev::RequestStore.store[:tracking_id] = request_id
         end
 
         it "preserves request_id" do
@@ -87,6 +88,7 @@ if defined?(::Shoryuken)
             .with(
               hash_including(
                 message_attributes: hash_including(
+                  "tracking_id" => { data_type: "String", string_value: request_id },
                   "request_id" => { data_type: "String", string_value: request_id }
                 )
               )
@@ -212,6 +214,7 @@ if defined?(::Shoryuken)
                 "request_depth" => 0,
                 "timestamp" => a_string_matching(/.+/),
                 "request_id" => a_string_matching(/.+/),
+                "tracking_id" => a_string_matching(/.+/),
                 "request_duration" => (a_value > 0)
               )
             end
@@ -236,6 +239,7 @@ if defined?(::Shoryuken)
               it "generates different request_ids" do
                 first, second = Kiev::Test::Log.entries
                 expect(first["request_id"]).to_not eq(second["request_id"])
+                expect(first["tracking_id"]).to_not eq(second["tracking_id"])
               end
             end
           end
@@ -249,6 +253,7 @@ if defined?(::Shoryuken)
           let(:message_attributes) do
             {
               request_id: request_id,
+              tracking_id: request_id,
               tree_path: tree_path,
               request_depth: request_depth
             }
@@ -260,6 +265,7 @@ if defined?(::Shoryuken)
             it "processes tracing fields properly" do
               is_expected.to include(
                 "request_id" => request_id,
+                "tracking_id" => request_id,
                 "tree_path" => tree_path,
                 "request_depth" => (request_depth + 1)
               )

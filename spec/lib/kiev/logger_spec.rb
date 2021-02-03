@@ -52,6 +52,11 @@ describe Kiev::Logger do
       expect(subject["request_id"]).to eq("test_id")
     end
 
+    it "sets tracking_id" do
+      Kiev::RequestStore.store[:tracking_id] = "test_id"
+      expect(subject["tracking_id"]).to eq("test_id")
+    end
+
     it "sets web path and verb" do
       Kiev::RequestStore.store[:web] = true
       Kiev::RequestStore.store[:request_verb] = "GET"
@@ -112,6 +117,7 @@ describe Kiev::Logger do
 
     it "calls #iso8601 on ActiveSupport::TimeWithZone objects" do
       skip unless defined?(ActiveSupport::TimeWithZone)
+      require "active_support/core_ext/time"
 
       subj = subject(some_timezone_object: Time.new(2015, 1, 1, 12, 13, 14, "+00:00").in_time_zone("UTC"))
       expect(subj["some_timezone_object"]).to eq("2015-01-01T12:13:14.000Z")

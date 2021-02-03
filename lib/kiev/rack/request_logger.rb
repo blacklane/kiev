@@ -125,8 +125,8 @@ module Kiev
               sio = StringIO.new(data[:body])
               gz = Zlib::GzipReader.new(sio)
               data[:body] = gz.read
-            rescue Zlib::GzipFile::Error => err
-              data[:gzip_parse_error] = err.message
+            rescue Zlib::GzipFile::Error => e
+              data[:gzip_parse_error] = e.message
             end
           end
         end

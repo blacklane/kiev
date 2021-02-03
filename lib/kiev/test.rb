@@ -25,8 +25,9 @@ module Kiev
 
       def entries
         return @logs unless @logs.empty?
+
         @logs = raw_logs.each_line.map(&::JSON.method(:parse))
-      rescue
+      rescue StandardError
         puts raw_logs
         raise
       end

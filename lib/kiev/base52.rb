@@ -3,7 +3,7 @@
 module Kiev
   module Base52
     KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".freeze
-    BASE = KEYS.length.freeze
+    BASE = KEYS.length
 
     def self.encode(num)
       return KEYS[0] if num == 0

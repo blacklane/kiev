@@ -47,7 +47,8 @@ module Kiev
             Kiev[key] = payload[key]
           end
           request_store = Kiev::RequestStore.store
-          request_store[:request_id] = payload[:request_id]
+          request_store[:tracking_id] = payload[:tracking_id]
+          request_store[:request_id] = payload[:tracking_id] || payload[:request_id]
           request_store[:request_depth] = payload[:request_depth].to_i + 1
           request_store[:tree_path] = payload[:tree_path]
 

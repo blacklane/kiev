@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 # need it because of bug in https://github.com/chanks/que/issues/191
@@ -12,4 +14,4 @@ gem "rack-test", require: false
 gem "rspec", require: false
 gem "minitest-reporters", require: false
 
-gemspec :path => "../"
+gemspec path: "../"

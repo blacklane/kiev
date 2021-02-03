@@ -4,6 +4,7 @@ module Kiev
   module Util
     def self.sanitize(value)
       return unless value
+
       value.gsub(/[^\w\-]/, "")[0...255]
     end
 

@@ -12,8 +12,10 @@ module Kiev
 
       def [](key)
         return unless @message_attributes.key?(key)
+
         attribute_value = @message_attributes[key]
         return unless attribute_value.data_type == "String"
+
         attribute_value.string_value
       end
     end

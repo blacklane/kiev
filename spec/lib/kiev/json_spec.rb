@@ -24,8 +24,8 @@ describe Kiev::JSON do
     Time: Time.new(2012, 1, 5, 23, 58, 7.99996, 32_400),
     Date: Date.new(2012, 1, 5, 23),
     DateTime: DateTime.new(2012, 1, 5, 23, 58, 7.99996, 32_400),
-    BigDecimal: BigDecimal.new("1") / 3,
-    BigDecimalInfinity: BigDecimal.new("0.5") / 0,
+    BigDecimal: BigDecimal("1") / 3,
+    BigDecimalInfinity: BigDecimal("0.5") / 0,
     Float: 1.0 / 3,
     FloatInfinity: 0.5 / 0,
     Range: (1..10),
@@ -57,7 +57,7 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\u2028\u2029><&\",\"StringSpecial2\":\"/\",\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\"," \
         "\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07+00:00\"," \
-        "\"BigDecimal\":\"0.333333333333333333E0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
+        "\"BigDecimal\":\"0.333333333333333333e0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
         "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":\"#<OpenStruct country=\\\"Australia\\\", population=20000000>\"," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
@@ -67,19 +67,20 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
         "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05T23:58:07.999+09:00\"," \
-        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.1000+00:00\"," \
+        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.999+00:00\"," \
         "\"BigDecimal\":\"0.333333333333333333\",\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333," \
-        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":{}," \
+        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":{\"table\":{\"country\":\"Australia\",\"population\":20000000}}," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
       )
     else
+      puts
       expect(subject).to eq(
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
         "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\"," \
-        "\"DateTime\":\"2012-01-05T23:58:07+00:00\",\"BigDecimal\":\"0.333333333333333333E0\"," \
-        "\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333,\"FloatInfinity\":null,\"Range\":\"1..10\"," \
+        "\"DateTime\":\"2012-01-05T23:58:07+00:00\",\"BigDecimal\":\"0.333333333333333333e0\"," \
+        "\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333,\"FloatInfinity\":null,\"Range\":\"1..10\"," \
         "\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":\"#\\u003cOpenStruct country=\\\"Australia\\\", population=20000000\\u003e\"," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
@@ -97,9 +98,9 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
         "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05T23:58:07.999+09:00\"," \
-        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.1000+00:00\"," \
+        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.999+00:00\"," \
         "\"BigDecimal\":\"0.333333333333333333\",\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333," \
-        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":{}," \
+        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":{\"table\":{\"country\":\"Australia\",\"population\":20000000}}," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
       )
@@ -108,7 +109,7 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
         "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05T23:58:07.999+09:00\"," \
-        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.1000+00:00\"," \
+        "\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07.999+00:00\"," \
         "\"BigDecimal\":\"0.333333333333333333\",\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333," \
         "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":{\"table\":{\"country\":\"Australia\",\"population\":20000000}}," \
@@ -138,7 +139,7 @@ describe Kiev::JSON do
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
         "\"StringSpecial\":\"\u2028\u2029><&\",\"StringSpecial2\":\"/\",\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\"," \
         "\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07+00:00\"," \
-        "\"BigDecimal\":\"0.333333333333333333E0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
+        "\"BigDecimal\":\"0.333333333333333333e0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
         "\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
         "\"OpenStruct\":\"#<OpenStruct country=\\\"Australia\\\", population=20000000>\"," \
         "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"

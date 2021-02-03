@@ -1,0 +1,79 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ['2.5.1', '2.7.2', '2.6.5']
+        gemfile:
+          - gemfiles/que_0.12.2.gemfile
+          - gemfiles/que_0.12.3.gemfile
+          - gemfiles/rails_5.2.gemfile
+          - gemfiles/shoryuken_4.0.gemfile
+          - gemfiles/sidekiq_4.2.gemfile
+          - gemfiles/sinatra_1.4.gemfile
+          - gemfiles/sinatra_2.0.gemfile
+        allow_failures:
+          - false
+        include:
+          - os: ubuntu
+            ruby-version: ruby-head
+            gemfile: gemfiles/rails_5.2.gemfile
+            allow_failures: true
+    env:
+      BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+      ALLOW_FAILURES: "${{ matrix.allow_failures }}"
+      REDIS_URL: "redis://localhost:6379/4"
+      DATABASE_URL: ${{ (startsWith(matrix.gemfile,'gemfiles/que') && 'postgres://postgres:postgres@localhost:5432/que_test') || 'sqlite3:db/combustion_test.sqlite'}}
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
+
+    # Service containers to run with `container-job`
+    services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:9.4
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: que_test
+        # Set health checks to wait until postgres has started
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+        # change this to (see https://github.com/ruby/setup-ruby#versioning):
+        # uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Run tests
+        run: bundle exec rake || $ALLOW_FAILURES

@@ -14,24 +14,26 @@ module Kiev
 
       def call(env)
         request_id_header_out = to_rack(:request_id)
-        request_id_header_in = to_http(:request_id)
+        tracking_id_header_out = to_rack(:tracking_id)
 
-        request_id = make_request_id(env[RAILS_REQUEST_ID] || env[request_id_header_in])
-        RequestStore.store[:request_id] = request_id
+        tracking_id = make_tracking_id(env[to_http(:tracking_id)] || env[RAILS_REQUEST_ID] || env[to_http(:request_id)])
+        RequestStore.store[:tracking_id] = tracking_id
+        RequestStore.store[:request_id] = tracking_id
         RequestStore.store[:request_depth] = request_depth(env)
         RequestStore.store[:tree_path] = tree_path(env)
 
-        @app.call(env).tap { |_status, headers, _body| headers[request_id_header_out] = request_id }
+        @app.call(env).tap do |_status, headers, _body|
+          headers[tracking_id_header_out] = tracking_id
+          headers[request_id_header_out] = tracking_id
+        end
       end
 
       private
 
-      # TODO: in Rails 5 they set `headers[X_REQUEST_ID]`, so this will not work
-      # https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/middleware/request_id.rb
-      # https://github.com/interagent/pliny/blob/master/lib/pliny/middleware/request_id.rb
       def tree_root?(env)
+        tracking_id_header_in = to_http(:tracking_id)
         request_id_header_in = to_http(:request_id)
-        !env[request_id_header_in]
+        !env[tracking_id_header_in] && !env[request_id_header_in]
       end
 
       def request_depth(env)
@@ -52,15 +54,15 @@ module Kiev
         Config.instance.all_http_propagated_fields[value]
       end
 
-      def make_request_id(request_id)
-        if request_id.nil? || request_id.empty?
-          internal_request_id
+      def make_tracking_id(tracking_id)
+        if tracking_id.nil? || tracking_id.empty?
+          internal_tracking_id
         else
-          Util.sanitize(request_id)
+          Util.sanitize(tracking_id)
         end
       end
 
-      def internal_request_id
+      def internal_tracking_id
         SecureRandom.uuid
       end
     end

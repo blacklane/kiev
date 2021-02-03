@@ -3,7 +3,7 @@
 class RootController < ActionController::Base
   def show
     respond_to do |format|
-      format.html { render text: "body" }
+      format.html { render html: "body" }
       format.json { render json: "{\"body\":true}" }
       format.xml { render xml: "<body>true</body>" }
     end
@@ -22,7 +22,7 @@ class RootController < ActionController::Base
   def log_in_action
     respond_to do |format|
       Rails.logger.info("test")
-      format.html { render text: "body" }
+      format.html { render html: "body" }
     end
   end
 
@@ -30,7 +30,7 @@ class RootController < ActionController::Base
     respond_to do |format|
       Kiev.payload(
         a: 0.0 / 0,
-        b: BigDecimal.new("1"),
+        b: BigDecimal("1"),
         c: "test",
         "c" => "c",
         d: User.new(id: 100, name: "Joe"),
@@ -38,7 +38,7 @@ class RootController < ActionController::Base
         f: true,
         j: false
       )
-      format.html { render text: "body" }
+      format.html { render html: "body" }
     end
   end
 
@@ -52,14 +52,14 @@ class RootController < ActionController::Base
 
   def get_by_id
     respond_to do |format|
-      format.html { render text: "body" }
+      format.html { render html: "body" }
     end
   end
 
   def test_event
-    Kiev.event(:test_event, some_data: User.new(id: 1000, name: "Jane", money: BigDecimal.new("1") / 3))
+    Kiev.event(:test_event, some_data: User.new(id: 1000, name: "Jane", money: BigDecimal("1") / 3))
     respond_to do |format|
-      format.html { render text: "body" }
+      format.html { render html: "body" }
     end
   end
 

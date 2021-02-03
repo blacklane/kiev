@@ -6,6 +6,7 @@ module Kiev
   # change field lookup.
   class ContextReader
     REQUEST_ID = "request_id"
+    TRACKING_ID = "tracking_id"
     REQUEST_DEPTH = "request_depth"
     TREE_PATH = "tree_path"
 
@@ -17,12 +18,14 @@ module Kiev
       subject[key]
     end
 
-    def request_id
-      self[REQUEST_ID] || SecureRandom.uuid
+    def tracking_id
+      self[TRACKING_ID] || self[REQUEST_ID] || SecureRandom.uuid
     end
 
+    alias_method :request_id, :tracking_id
+
     def tree_root?
-      !self[REQUEST_ID]
+      !self[TRACKING_ID] && !self[REQUEST_ID]
     end
 
     def request_depth

@@ -26,29 +26,33 @@ if defined?(Rails)
     def test_x_request_id
       get(
         "/",
-        {},
-        "X-Request-Id" => "external-uu-rid",
-        "X-Request-Depth" => "0",
-        "X-Tree-Path" => "AA"
+        params: {},
+        headers: {
+          "X-Request-Id" => "external-uu-rid",
+          "X-Tracking-Id" => "external-uu-rid",
+          "X-Request-Depth" => "0",
+          "X-Tree-Path" => "AA"
+        }
       )
       assert_equal("external-uu-rid", log_first["request_id"])
+      assert_equal("external-uu-rid", log_first["tracking_id"])
       assert_equal("AA", log_first["tree_path"])
       assert_equal(1, log_first["request_depth"])
     end
 
     def test_special_field
-      post("/", "", "Special-Field" => "special")
+      post("/", params: "", headers: { "Special-Field" => "special" })
       assert_equal("special", log_first["special_field"])
     end
 
     def test_get_with_params
-      get("/", some_data: "abc", password: "secret", utf8: "1")
+      get("/", params: { some_data: "abc", password: "secret", utf8: "1" })
       assert_equal("{\"some_data\":\"abc\",\"password\":\"[FILTERED]\"}", log_first["params"])
     end
 
     def test_post_with_params
       upload = Rack::Test::UploadedFile.new("#{DATA_FOLDER}/test.txt", "image/jpeg")
-      post("/post_file", some_data: "abc", "file" => upload)
+      post("/post_file", params: { some_data: "abc", "file" => upload })
       assert_not_nil(log_first)
       assert_equal(
         "{\"some_data\":\"abc\",\"file\":{\"original_filename\":\"test.txt\",\"content_type\":\"image/jpeg\","\
@@ -92,7 +96,7 @@ if defined?(Rails)
       refute_empty(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
       assert_equal(500, log_first["status"])
     end
 
@@ -108,7 +112,7 @@ if defined?(Rails)
         assert_nil(log_first["error_class"])
         refute_empty(log_first["request_id"])
         assert_equal("request_finished", log_first["event"])
-        assert_equal("INFO", log_first["level"])
+        assert_equal("ERROR", log_first["level"])
         assert_equal(404, log_first["status"])
       end
     end
@@ -121,19 +125,19 @@ if defined?(Rails)
       assert_nil(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
       assert_equal("request_finished", log_first["event"])
-      assert_equal("INFO", log_first["level"])
+      assert_equal("ERROR", log_first["level"])
     end
 
     def test_json_post
       json = "{\"some_data\": \"abc\", \"password\": \"secret\", \"utf8\": \"1\"}"
-      post("/", json, "CONTENT_TYPE" => "application/json")
+      post("/", params: json, headers: { "CONTENT_TYPE" => "application/json" })
       assert_equal("{\"some_data\":\"abc\",\"password\":\"[FILTERED]\"}", log_first["params"])
     end
 
     def test_malformed_json_post
       begin
         malformed_json = "{\"some_data\": \"abc\", \"password\": \"secret\", \"utf8\": "
-        status = post("/", malformed_json, "CONTENT_TYPE" => "application/json")
+        status = post("/", params: malformed_json, headers: { "CONTENT_TYPE" => "application/json" })
         assert_equal(400, status)
       rescue
         # in case of action_dispatch.show_exceptions = false
@@ -143,13 +147,13 @@ if defined?(Rails)
     end
 
     def test_xml_post
-      post("/", "<xml><a>b</a><password>c</password><utf8>1</utf8></xml>", "CONTENT_TYPE" => "application/xml")
+      post("/", params: "<xml><a>b</a><password>c</password><utf8>1</utf8></xml>", headers: { "CONTENT_TYPE" => "application/xml" })
       assert_equal("{\"xml\":{\"a\":\"b\",\"password\":\"[FILTERED]\"}}", log_first["params"])
     end
 
     def test_malformed_xml_post
       begin
-        status = post("/", "not xml", "CONTENT_TYPE" => "application/xml")
+        status = post("/", params: "not xml", headers: { "CONTENT_TYPE" => "application/xml" })
         assert_equal(400, status)
       rescue
         # in case of action_dispatch.show_exceptions = false
