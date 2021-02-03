@@ -1,4 +1,4 @@
-# Kiev [![Build Status](https://github.com/blacklane/kiev/workflows/Main%20CI/badge.svg?branch=master)](https://github.com/blacklane/kiev/actions?query=workflow%3A%22Main+CI%22)
+# Kiev [![Build Status](https://github.com/blacklane/kiev/workflows/Main%20CI/badge.svg?branch=master)](https://github.com/blacklane/kiev/actions?query=workflow%3A%22Main+CI%22) [![Gem Version](https://badge.fury.io/rb/kiev.svg)](https://badge.fury.io/rb/kiev)
 
 Kiev is a comprehensive logging library aimed at covering a wide range of frameworks and tools from the Ruby ecosystem:
 
