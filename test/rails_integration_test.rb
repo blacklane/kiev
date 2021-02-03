@@ -8,7 +8,6 @@ if defined?(Rails)
 
     def test_simple_get
       get("/")
-      p log_first
       assert_equal("GET", log_first["verb"])
       assert_equal("/", log_first["path"])
       assert_equal(200, log_first["status"])
@@ -30,6 +29,7 @@ if defined?(Rails)
         params: {},
         headers: {
           "X-Request-Id" => "external-uu-rid",
+          "X-Tracking-Id" => "external-uu-rid",
           "X-Request-Depth" => "0",
           "X-Tree-Path" => "AA"
         }

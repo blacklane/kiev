@@ -52,6 +52,11 @@ describe Kiev::Logger do
       expect(subject["request_id"]).to eq("test_id")
     end
 
+    it "sets tracking_id" do
+      Kiev::RequestStore.store[:tracking_id] = "test_id"
+      expect(subject["tracking_id"]).to eq("test_id")
+    end
+
     it "sets web path and verb" do
       Kiev::RequestStore.store[:web] = true
       Kiev::RequestStore.store[:request_verb] = "GET"

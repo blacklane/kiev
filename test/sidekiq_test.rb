@@ -56,12 +56,14 @@ if defined?(Sidekiq)
       assert_equal("B", log_first["tree_path"])
       refute_empty(log_first["timestamp"])
       refute_empty(log_first["request_id"])
+      refute_empty(log_first["tracking_id"])
       refute_nil(log_first["request_duration"])
       assert_equal(0, log_first["request_depth"])
       assert_nil(log_first["error_class"])
       assert_nil(log_first["error_message"])
       assert_nil(log_first["error_backtrace"])
       assert_nil(Kiev::RequestStore.store[:request_id])
+      assert_nil(Kiev::RequestStore.store[:tracking_id])
     end
 
     it "server middleware logs error job" do
@@ -72,6 +74,7 @@ if defined?(Sidekiq)
       assert_equal("[\"test\"]", log_first["params"])
       refute_empty(log_first["timestamp"])
       refute_empty(log_first["request_id"])
+      refute_empty(log_first["tracking_id"])
       refute_nil(log_first["request_duration"])
       assert_equal(0, log_first["request_depth"])
       assert_equal("NoMethodError", log_first["error_class"])
@@ -86,13 +89,16 @@ if defined?(Sidekiq)
     it "server middleware preserves existing request_id" do
       run_sidekiq("request_id" => "test")
       assert_equal("test", log_first["request_id"])
+      assert_equal("test", log_first["tracking_id"])
       assert_nil(Kiev::RequestStore.store[:request_id])
+      assert_nil(Kiev::RequestStore.store[:tracking_id])
     end
 
     it "server middleware generates new request_id each time" do
       run_sidekiq
       run_sidekiq
       refute_equal(log_last["request_id"], log_first["request_id"])
+      refute_equal(log_last["tracking_id"], log_first["tracking_id"])
     end
 
     it "server job propagates request_id to underlying job" do
@@ -103,6 +109,7 @@ if defined?(Sidekiq)
       assert_equal(queue.length, 1)
       assert_equal(queue.first["class"], "SidekiqTest::CustomWorker")
       assert_equal(queue.first["request_id"], log_first["request_id"])
+      assert_equal(queue.first["tracking_id"], log_first["tracking_id"])
     end
 
     it "client middleware stores request_id in job" do
