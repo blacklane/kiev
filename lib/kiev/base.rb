@@ -47,7 +47,9 @@ module Kiev
     end
 
     def request_id
-      RequestStore.store[:request_id]
+      RequestStore.store[:tracking_id]
     end
+
+    alias_method :tracking_id, :request_id
   end
 end
