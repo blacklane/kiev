@@ -154,6 +154,36 @@ Kiev::Shoryuken.enable
 
 The name of the worker class is not logged by default. Configure [`persistent_log_fields` option](#persistent_log_fields) to include `"shoryuken_class"` if you want this.
 
+### AWS SNS
+
+To enhance messages published to SNS topics you can use the ContextInjector:
+
+```ruby
+sns_message = { topic_arn: "...",  message: "{...}" }
+Kiev::Kafka.inject_context(sns_message[:message_attributes])
+
+```
+
+After this operation the message attributes will also include required context for the Kiev logger.
+
+### Kafka
+
+To enhance messages published to Kafka topics you can use the ContextInjector:
+
+```ruby
+Kiev::Kafka.inject_context(headers)
+```
+
+After this operation the headers variable will also include required context for the Kiev logger.
+
+If you have a consumed `Kafka::FetchedMessage` you can extract logger context with: 
+
+```ruby
+Kiev::Kafka.extract_context(message)
+```
+
+This will work regardless if headers are in HTTP format, e.g. `X-Tracking-Id` or plain field names: `tracking_id`. Plus the `message_key` field will contain the key of processed message. In case you want to log some more fields configure `persistent_log_fields` and `jobs_propagated_fields`.  
+
 ### Que
 
 Add the following lines to your initializer code:
@@ -219,7 +249,9 @@ For web requests the Kiev middleware will log the following information by defau
 
 * `params` attribute will store both query parameters and request body fields (as long as they are parseable). Sensitive fields will be filtered out - see the `#filtered_params` option.
 
-* `request_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4).
+* `request_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4). (currently deprecated in favor of a new name: `tracking_id`)
+
+* `tracking_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4). If not provided the value is seeded from deprecated `request_id`. 
 
 * `request_depth` represents the position of the current request within a chain of requests. It starts with 0.
 
