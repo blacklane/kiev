@@ -21,6 +21,7 @@ jobs:
       matrix:
         ruby: ['2.5.1', '2.7.2', '2.6.5']
         gemfile:
+          - gemfiles/ruby_kafka.gemfile
           - gemfiles/que_0.12.2.gemfile
           - gemfiles/que_0.12.3.gemfile
           - gemfiles/rails_5.2.gemfile
