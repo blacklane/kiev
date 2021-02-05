@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "message_context"
-require "kiev/request_id"
-require "kiev/context_reader"
+require "kiev/config"
+require "kiev/subrequest_helper"
 
 module Kiev
   module Kafka
     class ContextInjector
-      include Kiev::RequestId::Mixin
-
       # @param [Hash] headers Injects context headers
       # @return [Hash]
       def call(headers = {})
