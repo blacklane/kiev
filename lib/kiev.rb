@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "kiev/base"
+require_relative "kiev/aws_sns" if defined?(AWS::SNS)
 require_relative "kiev/kafka" if defined?(Kafka)
 require_relative "kiev/rack" if defined?(Rack)
 require_relative "kiev/railtie" if defined?(Rails)
