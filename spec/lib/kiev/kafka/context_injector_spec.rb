@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "ruby-kafka"
 
 if defined?(::Kafka)
   describe Kiev::Kafka::ContextInjector do
