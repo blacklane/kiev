@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
+require "kiev/aws_sns/context_injector"
+
 module Kiev
   module Shoryuken
     module Middleware
       class MessageTracer
         def call(options)
-          attrbutes = options[:message_attributes] ||= {}
-          SubrequestHelper.payload.each do |key, value|
-            attrbutes[key] = {
-              data_type: "String",
-              string_value: value.to_s
-            }
-          end
+          options[:message_attributes] ||= {}
+          Kiev::AwsSns::ContextInjector.new.call(options[:message_attributes])
           yield
         end
       end
