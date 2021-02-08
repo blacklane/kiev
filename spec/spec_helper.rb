@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "bundler"
+require "delegate"
+
 Bundler.require :default, :development
 require "rack/test" if defined?(Rack)
 
