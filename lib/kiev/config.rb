@@ -47,9 +47,19 @@ module Kiev
         credit_card_holder
         credit_card_expiry_month
         credit_card_expiry_year
+        credit_card_valid_date
+        caption
         CardNumber
         CardCVV
         CardExpires
+        new_booker_first_name
+        new_booker_last_name
+        new_booker_email
+        new_booker_mobile_phone
+        new_passenger_first_name
+        new_passenger_last_name
+        new_passenger_email
+        new_passenger_mobile_phone
       ).freeze
 
     IGNORED_PARAMS =
