@@ -52,14 +52,29 @@ module Kiev
         CardNumber
         CardCVV
         CardExpires
+        first_name
+        last_name
+        email
+        paypal_email
+        phone
         new_booker_first_name
         new_booker_last_name
         new_booker_email
         new_booker_mobile_phone
+        new_booker_phone
+        new_booker_address
         new_passenger_first_name
         new_passenger_last_name
         new_passenger_email
         new_passenger_mobile_phone
+        new_passenger_phone
+        new_passenger_address
+        new_payer_first_name
+        new_payer_last_name
+        new_payer_email
+        new_payer_mobile_phone
+        new_payer_phone
+        new_payer_address
       ).freeze
 
     IGNORED_PARAMS =
