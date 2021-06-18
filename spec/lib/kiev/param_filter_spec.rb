@@ -22,8 +22,13 @@ describe Kiev::ParamFilter do
       expect(described_class.filter(input, filtered, ignored)).to eq(expected)
     end
 
-    it "does not filter symbol param" do
-      expect(described_class.filter({ "password": "password" }, filtered, ignored)).to eq("password": "password")
+    it "filters symbol param" do
+      expect(described_class.filter({ "password": "password" }, filtered, ignored)).to eq("password": "[FILTERED]")
+    end
+
+    it "filters mixed param" do
+      expect(described_class.filter({ "password": "password", "password" => "password" }, filtered, ignored))
+        .to eq("password": "[FILTERED]", "password" => "[FILTERED]")
     end
 
     it "ignores param" do
@@ -34,8 +39,31 @@ describe Kiev::ParamFilter do
       expect(described_class.filter({ "form" => { "action" => "submit" } }, filtered, ignored)).to eq("form" => {})
     end
 
-    it "does not ignore symbol param" do
-      expect(described_class.filter({ "utf8": "utf8" }, filtered, ignored)).to eq("utf8": "utf8")
+    it "ignores symbol param" do
+      expect(described_class.filter({ "utf8": "utf8" }, filtered, ignored)).to eq({})
+    end
+
+    it "ignores mixed params" do
+      expect(described_class.filter({ "utf8": "utf8", "utf8" => "utf8" }, filtered, ignored)).to eq({})
+    end
+
+    context "when configuration params specified as strings and symbols at the same time" do
+      context "when filtered" do
+        let(:filtered) { [:password, "type"] }
+
+        it "filters both" do
+          expect(described_class.filter({ type: "type", "password" => "password"}, filtered, ignored))
+            .to eq(type: "[FILTERED]", "password" => "[FILTERED]")
+        end
+      end
+
+      context "when ignored" do
+        let(:ignored) { [:password, "type"] }
+
+        it "ignores both" do
+          expect(described_class.filter({ type: "type", "password" => "password"}, filtered, ignored)).to eq({})
+        end
+      end
     end
   end
 end

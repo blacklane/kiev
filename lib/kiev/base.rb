@@ -26,8 +26,20 @@ module Kiev
       Config.instance.logger
     end
 
+    def filtered_params
+      Config.instance.filtered_params
+    end
+
+    def ignored_params
+      Config.instance.ignored_params
+    end
+
     def event(event_name, data = EMPTY_OBJ)
-      logger.log(::Logger::Severity::INFO, data, event_name)
+      logger.log(
+        ::Logger::Severity::INFO,
+        ParamFilter.filter(data, filtered_params, ignored_params),
+        event_name
+      )
     end
 
     def []=(name, value)

@@ -85,8 +85,6 @@ module Kiev
             request.params
           end
 
-        params = ParamFilter.filter(params, config.filtered_params, config.ignored_params)
-
         data = {
           host: request.host, # env["HTTP_HOST"] || env["HTTPS_HOST"],
           params: params.empty? ? nil : params, # env[Rack::QUERY_STRING],
