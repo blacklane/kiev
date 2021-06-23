@@ -45,5 +45,17 @@ describe Kiev do
       Kiev.event(:test_one, data: "hello")
       expect(log_first["data"]).to eq("hello")
     end
+
+    context "when sensitive data" do
+      let(:data) { { data: "hello" } }
+
+      before { allow(Kiev::ParamFilter).to receive(:filter) }
+
+      it "filters logging data" do
+        Kiev.event(:test_one, data)
+        expect(Kiev::ParamFilter).to have_received(:filter)
+          .with(data, Kiev::Config.instance.filtered_params, Kiev::Config.instance.ignored_params)
+      end
+    end
   end
 end

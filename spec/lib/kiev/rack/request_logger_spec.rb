@@ -8,6 +8,7 @@ if defined?(Rack)
     include Rack::Test::Methods
     before do
       allow(Kiev).to receive(:event)
+      allow(logger).to receive(:log)
       allow(Time).to receive(:now).and_return(Time.new(2000))
     end
 
@@ -50,13 +51,22 @@ if defined?(Rack)
         end
 
         it "filters params" do
+          allow(Kiev).to receive(:event).and_call_original
           get("/", password: "secret")
-          expect(subject).to have_received(:event).with(*request_finished(params: { "password" => "[FILTERED]" }))
+
+          expect(logger).to have_received(:log)
+            .with(
+              1,
+              request_finished(params: { "password" => "[FILTERED]" }).last,
+              :request_finished
+            )
         end
 
         it "ignores params" do
+          allow(Kiev).to receive(:event).and_call_original
           get("/", utf8: "1")
-          expect(subject).to have_received(:event).with(*request_finished)
+
+          expect(logger).to have_received(:log).with(1, request_finished(params: {}).last, :request_finished)
         end
 
         it "ignores request body" do

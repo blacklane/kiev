@@ -358,6 +358,18 @@ if defined?(::Shoryuken)
             end
           end
         end
+
+        context "when sensitive data" do
+          let(:message_body) { { "password" => "secret" } }
+
+          subject { Kiev::Test::Log.entries.first }
+
+          before { processor.process }
+
+          it "filters logging data" do
+            is_expected.to include("body" => "{\"password\":\"[FILTERED]\"}")
+          end
+        end
       end
     end
   end
