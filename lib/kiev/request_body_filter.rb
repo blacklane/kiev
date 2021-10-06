@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "request_body_filter/default"
-require_relative "request_body_filter/xml"
-require_relative "request_body_filter/json"
-require_relative "request_body_filter/form_data"
+require_relative "filters/default"
+require_relative "filters/xml"
+require_relative "filters/json"
+require_relative "filters/form_data"
 
 module Kiev
   module RequestBodyFilter
@@ -16,13 +16,13 @@ module Kiev
     def self.for_content_type(content_type)
       case content_type
       when *JSON_CONTENT_TYPE
-        Json
+        Filters::Json
       when *XML_CONTENT_TYPES
-        Xml
+        Filters::Xml
       when *FORM_DATA_CONTENT_TYPES
-        FormData
+        Filters::FormData
       else
-        Default
+        Filters::Default
       end
     end
 

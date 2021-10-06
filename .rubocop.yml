@@ -14,7 +14,6 @@ Lint/SuppressedException:
     - spec/**/*.rb
 Lint/RescueException:
   Exclude:
-    - lib/kiev/request_body_filter/json.rb
     - lib/kiev/sidekiq/request_logger.rb
     - lib/kiev/shoryuken/request_logger.rb
     - lib/kiev/rack/request_logger.rb

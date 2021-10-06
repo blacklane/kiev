@@ -20,10 +20,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = ">= 2.5"
-  spec.add_dependency "oga", "~> 2.2"
+  spec.add_dependency "nokogiri", "~> 1.12.5"
   spec.add_dependency "rack", ">= 1", "< 3"
   spec.add_dependency "request_store", ">= 1.0", "< 1.4"
   spec.add_dependency "ruby_dig", "~> 0.0.2" # to support ruby 2.2
+  spec.add_development_dependency "pry", "~> 0.14.1"
   spec.add_development_dependency "rake", "~> 0"
   spec.add_development_dependency "rspec", "~> 3.10"
   spec.add_development_dependency "rubocop", "~> 0.54"

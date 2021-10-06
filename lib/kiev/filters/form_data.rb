@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Kiev
-  module RequestBodyFilter
+  module Filters
     class FormData
-      def self.call(request_body, filtered_params, ignored_params)
-        params = ::Rack::Utils.parse_nested_query(request_body)
+      def self.call(body, filtered_params, ignored_params)
+        params = ::Rack::Utils.parse_nested_query(body)
         ParamFilter.filter(params, filtered_params, ignored_params)
       end
     end

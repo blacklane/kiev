@@ -47,12 +47,36 @@ describe Kiev::ParamFilter do
       expect(described_class.filter({ "utf8": "utf8", "utf8" => "utf8" }, filtered, ignored)).to eq({})
     end
 
+    it "filters nested json" do
+      expect(
+        described_class.filter({ "notification_body": { "password" => "password" }.to_json }, filtered, ignored)
+      ).to eq({ "notification_body": { "password" => "[FILTERED]" }.to_json })
+    end
+
+    it "filters nested xml" do
+      expect(
+        described_class.filter({ "notification_body": "<password>password</password>" }, filtered, ignored)
+      ).to eq({ "notification_body": "<password>[FILTERED]</password>" })
+    end
+
+    it "doesn't change nil values" do
+      expect(
+        described_class.filter({ "notification_body": { "something" => nil }.to_json }, filtered, ignored)
+      ).to eq({ "notification_body": { "something" => nil }.to_json })
+    end
+
+    it "doesn't change non string values" do
+      expect(
+        described_class.filter({ "notification_body": { "something" => 200 }.to_json }, filtered, ignored)
+      ).to eq({ "notification_body": { "something" => 200 }.to_json })
+    end
+
     context "when configuration params specified as strings and symbols at the same time" do
       context "when filtered" do
         let(:filtered) { [:password, "type"] }
 
         it "filters both" do
-          expect(described_class.filter({ type: "type", "password" => "password"}, filtered, ignored))
+          expect(described_class.filter({ type: "type", "password" => "password" }, filtered, ignored))
             .to eq(type: "[FILTERED]", "password" => "[FILTERED]")
         end
       end
@@ -61,7 +85,7 @@ describe Kiev::ParamFilter do
         let(:ignored) { [:password, "type"] }
 
         it "ignores both" do
-          expect(described_class.filter({ type: "type", "password" => "password"}, filtered, ignored)).to eq({})
+          expect(described_class.filter({ type: "type", "password" => "password" }, filtered, ignored)).to eq({})
         end
       end
     end

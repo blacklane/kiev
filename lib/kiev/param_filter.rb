@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "filters/xml"
+require_relative "filters/json"
+
 module Kiev
   class ParamFilter
     FILTERED = "[FILTERED]"
@@ -31,7 +34,7 @@ module Kiev
           elsif value.is_a?(Hash)
             call(value)
           else
-            value
+            apply_filters(value)
           end
       end
     end
@@ -42,6 +45,12 @@ module Kiev
 
     def normalize(params)
       Set.new(params.map(&:to_s))
+    end
+
+    def apply_filters(value)
+      [Filters::Json, Filters::Xml].reduce(value) do |acc, filter|
+        filter.call(acc, filtered_params, ignored_params)
+      end
     end
   end
 end
