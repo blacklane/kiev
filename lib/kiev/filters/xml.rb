@@ -13,7 +13,7 @@ module Kiev
       def self.call(body, filtered_params, _ignored_params)
         return body unless body.is_a?(String)
 
-        document = Nokogiri::XML(body) { |config| config.strict.noent }
+        document = Nokogiri::XML(body) { |config| config.strict.nonet }
         filtered_params.each do |param|
           sensitive_param = document.at_xpath("//#{param}/text()")
           sensitive_param.content = ParamFilter::FILTERED if sensitive_param.respond_to?(:content=)
