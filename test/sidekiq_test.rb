@@ -49,7 +49,7 @@ if defined?(Sidekiq)
     it "server middleware logs successful job" do
       run_sidekiq
       assert_equal("SidekiqTest::CustomWorker", log_first["job_name"])
-      assert_equal("job_finished", log_first["event"])
+      assert_equal("job_finished", log_first["log_name"])
       assert_equal("INFO", log_first["level"])
       assert_equal("[\"test\"]", log_first["params"])
       assert_equal(true, log_first["tree_leaf"])
@@ -69,7 +69,7 @@ if defined?(Sidekiq)
     it "server middleware logs error job" do
       run_sidekiq("class" => ErrorWorker.to_s)
       assert_equal("SidekiqTest::ErrorWorker", log_first["job_name"])
-      assert_equal("job_finished", log_first["event"])
+      assert_equal("job_finished", log_first["log_name"])
       assert_equal("ERROR", log_first["level"])
       assert_equal("[\"test\"]", log_first["params"])
       refute_empty(log_first["timestamp"])
