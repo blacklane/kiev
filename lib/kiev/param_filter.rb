@@ -4,6 +4,10 @@ module Kiev
   class ParamFilter
     FILTERED = "[FILTERED]"
 
+    def self.filterable?(params)
+      params.respond_to?(:each_with_object)
+    end
+
     def self.filter(params, filtered_params, ignored_params)
       new(filtered_params, ignored_params).call(params)
     end

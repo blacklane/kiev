@@ -35,7 +35,7 @@ module Kiev
     end
 
     def event(event_name, data = EMPTY_OBJ)
-      filtered_data = if data.respond_to?(:each_with_object)
+      filtered_data = if ParamFilter.filterable?(data)
         ParamFilter.filter(data, filtered_params, ignored_params)
       else
         data

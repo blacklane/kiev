@@ -3,6 +3,22 @@
 require "spec_helper"
 
 describe Kiev::ParamFilter do
+  describe "filterable" do
+    subject(:filterable?) { described_class.filterable?(params) }
+
+    context "when params is a string" do
+      let(:params) { "non filterable string, yet" }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when params are a Hash" do
+      let(:params) { { "filterable" => "params" } }
+
+      it { is_expected.to eq(true) }
+    end
+  end
+
   describe "filter" do
     let(:filtered) { Kiev::Config.instance.filtered_params }
     let(:ignored) { Kiev::Config.instance.ignored_params }
