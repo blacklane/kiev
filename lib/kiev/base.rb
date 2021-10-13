@@ -35,9 +35,15 @@ module Kiev
     end
 
     def event(event_name, data = EMPTY_OBJ)
+      filtered_data = if data.respond_to?(:each_with_object)
+        ParamFilter.filter(data, filtered_params, ignored_params)
+      else
+        data
+      end
+
       logger.log(
         ::Logger::Severity::INFO,
-        ParamFilter.filter(data, filtered_params, ignored_params),
+        filtered_data,
         event_name
       )
     end
