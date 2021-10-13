@@ -13,6 +13,7 @@ module Kiev
     def_delegators(*([:@logger] + ::Logger.instance_methods(false)))
 
     DEFAULT_LOG_NAME = "log"
+    DEFAULT_MESSAGE = "log"
     LOG_ERROR = "ERROR"
     ERROR_STATUS = 500
 
@@ -23,6 +24,7 @@ module Kiev
           log_name: log_name || DEFAULT_LOG_NAME,
           level: severity,
           timestamp: time.utc,
+          message: log_name || DEFAULT_MESSAGE,
           tracking_id: RequestStore.store[:tracking_id],
           request_id: RequestStore.store[:request_id],
           request_depth: RequestStore.store[:request_depth],
