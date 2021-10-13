@@ -46,6 +46,11 @@ describe Kiev do
       expect(log_first["data"]).to eq("hello")
     end
 
+    it "accepts data as string" do
+      Kiev.event(:test_one, "hello")
+      expect(log_first["message"]).to eq("hello")
+    end
+
     context "when sensitive data" do
       let(:data) { { data: "hello" } }
 
