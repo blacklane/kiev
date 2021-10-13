@@ -4,10 +4,6 @@ module Kiev
   class ParamFilter
     FILTERED = "[FILTERED]"
 
-    def self.filterable?(params)
-      params.respond_to?(:each_with_object)
-    end
-
     def self.filter(params, filtered_params, ignored_params)
       new(filtered_params, ignored_params).call(params)
     end
@@ -18,6 +14,8 @@ module Kiev
     end
 
     def call(params)
+      return params unless filterable?(params)
+
       params.each_with_object({}) do |(key, value), acc|
         next if ignored_params.include?(key.to_s)
 
@@ -43,6 +41,10 @@ module Kiev
     private
 
     attr_reader :filtered_params, :ignored_params
+
+    def filterable?(params)
+      params.respond_to?(:each_with_object)
+    end
 
     def normalize(params)
       Set.new(params.map(&:to_s))
