@@ -38,7 +38,7 @@ describe Kiev do
 
     it "accepts one argument" do
       Kiev.event(:test_one)
-      expect(log_first["event"]).to eq("test_one")
+      expect(log_first["log_name"]).to eq("test_one")
     end
 
     it "accepts two arguments" do

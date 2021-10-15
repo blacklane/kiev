@@ -34,11 +34,11 @@ module Kiev
       Config.instance.ignored_params
     end
 
-    def event(event_name, data = EMPTY_OBJ)
+    def event(log_name, data = EMPTY_OBJ)
       logger.log(
         ::Logger::Severity::INFO,
         ParamFilter.filter(data, filtered_params, ignored_params),
-        event_name
+        log_name
       )
     end
 

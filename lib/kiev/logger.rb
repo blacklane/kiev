@@ -12,17 +12,19 @@ module Kiev
     extend Forwardable
     def_delegators(*([:@logger] + ::Logger.instance_methods(false)))
 
-    DEFAULT_EVENT_NAME = "log"
+    DEFAULT_LOG_NAME = "log"
+    DEFAULT_MESSAGE = "log"
     LOG_ERROR = "ERROR"
     ERROR_STATUS = 500
 
-    FORMATTER = proc do |severity, time, event_name, data|
+    FORMATTER = proc do |severity, time, log_name, data|
       entry =
         {
           application: Config.instance.app,
-          event: event_name || DEFAULT_EVENT_NAME,
+          log_name: log_name || DEFAULT_LOG_NAME,
           level: severity,
           timestamp: time.utc,
+          message: log_name || DEFAULT_MESSAGE,
           tracking_id: RequestStore.store[:tracking_id],
           request_id: RequestStore.store[:request_id],
           request_depth: RequestStore.store[:request_depth],
@@ -39,12 +41,12 @@ module Kiev
         entry[:jid] = RequestStore.store[:jid]
       end
 
-      if !RequestStore.store[:subrequest_count] && %i(request_finished job_finished).include?(event_name)
+      if !RequestStore.store[:subrequest_count] && %i(request_finished job_finished).include?(log_name)
         entry[:tree_leaf] = true
       end
 
       if RequestStore.store[:payload]
-        if %i(request_finished job_finished).include?(event_name)
+        if %i(request_finished job_finished).include?(log_name)
           entry.merge!(RequestStore.store[:payload])
         else
           Config.instance.persistent_log_fields.each do |field|
@@ -68,17 +70,17 @@ module Kiev
       JSON.logstash(entry)
     end
 
-    DEVELOPMENT_FORMATTER = proc do |severity, time, event_name, data|
+    DEVELOPMENT_FORMATTER = proc do |severity, time, log_name, data|
       entry = []
 
       entry << time.iso8601
-      entry << (event_name || severity).upcase
+      entry << (log_name || severity).upcase
 
       if data.is_a?(String)
         entry << "#{data}\n"
       end
 
-      if %i(request_finished job_finished).include?(event_name)
+      if %i(request_finished job_finished).include?(log_name)
         verb = RequestStore.store[:request_verb]
         path = RequestStore.store[:request_path]
         entry << "#{verb} #{path}" if verb && path

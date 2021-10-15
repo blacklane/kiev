@@ -12,7 +12,7 @@ if defined?(Rails)
       assert_equal("/", log_first["path"])
       assert_equal(200, log_first["status"])
       assert_equal("www.example.com", log_first["host"])
-      assert_equal("request_finished", log_first["event"])
+      assert_equal("request_finished", log_first["log_name"])
       assert_equal("INFO", log_first["level"])
       assert_equal("127.0.0.1", log_first["ip"])
       assert_equal("root#show", log_first["route"])
@@ -64,7 +64,7 @@ if defined?(Rails)
 
     def test_log
       get("/log_in_action")
-      assert_equal("log", log_first["event"])
+      assert_equal("log", log_first["log_name"])
       assert_equal("INFO", log_first["level"])
       refute_empty(log_first["request_id"])
       assert_nil(log_first["route"])
@@ -95,7 +95,7 @@ if defined?(Rails)
       assert_match(/Error/, log_first["error_message"])
       refute_empty(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
-      assert_equal("request_finished", log_first["event"])
+      assert_equal("request_finished", log_first["log_name"])
       assert_equal("ERROR", log_first["level"])
       assert_equal(500, log_first["status"])
     end
@@ -111,7 +111,7 @@ if defined?(Rails)
         assert_equal("root#record_not_found", log_first["route"])
         assert_nil(log_first["error_class"])
         refute_empty(log_first["request_id"])
-        assert_equal("request_finished", log_first["event"])
+        assert_equal("request_finished", log_first["log_name"])
         assert_equal("ERROR", log_first["level"])
         assert_equal(404, log_first["status"])
       end
@@ -124,7 +124,7 @@ if defined?(Rails)
       assert_nil(log_first["error_message"])
       assert_nil(log_first["error_backtrace"])
       refute_empty(log_first["request_id"])
-      assert_equal("request_finished", log_first["event"])
+      assert_equal("request_finished", log_first["log_name"])
       assert_equal("ERROR", log_first["level"])
     end
 
@@ -191,7 +191,7 @@ if defined?(Rails)
     def test_event
       get("/test_event")
       assert_equal("{\"id\":1000,\"name\":\"Jane\",\"money\":\"0.333333333333333333\"}", log_first["some_data"])
-      assert_equal("test_event", log_first["event"])
+      assert_equal("test_event", log_first["log_name"])
     end
   end
 end

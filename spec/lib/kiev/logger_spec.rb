@@ -36,7 +36,7 @@ describe Kiev::Logger do
     end
 
     it "sets event" do
-      expect(subject["event"]).to eq("test_event")
+      expect(subject["log_name"]).to eq("test_event")
     end
 
     it "sets level" do
@@ -98,8 +98,8 @@ describe Kiev::Logger do
       time = Time.new(2000, 1, 1, 0, 0, 0, "+00:00")
       subj = described_class::FORMATTER.call(::Logger::Severity::INFO, time)
 
-      expected = "{\"application\":\"test_app\",\"event\":\"log\",\"level\":1,"\
-        "\"timestamp\":\"2000-01-01T00:00:00.000Z\"}\n"
+      expected = "{\"application\":\"test_app\",\"log_name\":\"log\",\"level\":1,"\
+        "\"timestamp\":\"2000-01-01T00:00:00.000Z\",\"message\":\"log\"}\n"
       expect(subj).to eq(expected)
     end
 

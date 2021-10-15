@@ -206,7 +206,7 @@ if defined?(::Shoryuken)
 
             it "has fields of a successful job" do
               is_expected.to include(
-                "event" => "job_finished",
+                "log_name" => "job_finished",
                 "level" => "INFO",
                 "body" => message_body,
                 "tree_leaf" => true,
