@@ -11,5 +11,8 @@ gem "rspec", require: false
 gem "minitest-reporters", require: false
 
 gem "her"
+# We need to do it, since her gem doesn't lock upper boundry
+# https://github.com/remi/her/blob/master/her.gemspec#L26
+gem "faraday", "~> 1.9.3"
 
 gemspec path: "../"

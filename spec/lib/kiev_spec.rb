@@ -62,5 +62,66 @@ describe Kiev do
           .with(data, Kiev::Config.instance.filtered_params, Kiev::Config.instance.ignored_params)
       end
     end
+
+    describe "event with predefined severity" do
+      shared_examples "with log severity" do |severity|
+        it "has log severity" do
+          initial = described_class.log_level
+          described_class.configure do |c|
+            c.log_level = ::Logger::DEBUG
+          end
+
+          Kiev.public_send(severity, :test_one)
+          expect(log_first["level"]).to eq(severity.to_s.upcase)
+
+          described_class.configure do |c|
+            c.log_level = initial
+          end
+        end
+      end
+
+      context "with debug severity" do
+        include_examples "with log severity", :debug
+      end
+
+      context "with info severity" do
+        include_examples "with log severity", :info
+      end
+
+      context "with warn severity" do
+        include_examples "with log severity", :warn
+      end
+
+      context "with error severity" do
+        include_examples "with log severity", :error
+      end
+
+      context "with fatal severity" do
+        include_examples "with log severity", :fatal
+      end
+    end
+
+    describe "log data filtering" do
+      it "filters params by default" do
+        Kiev.event(:test_one, { credit_card_number: "123" })
+        expect(log_first["credit_card_number"]).to eq("[FILTERED]")
+      end
+
+      context "when diabled for particular log level" do
+        it "doesn't filters params" do
+          initial = described_class.enable_filter_for_log_levels
+          described_class.configure do |c|
+            c.enable_filter_for_log_levels = [0, 2, 3, 4]
+          end
+
+          Kiev.event(:test_one, { credit_card_number: "123" })
+          expect(log_first["credit_card_number"]).to eq("123")
+
+          described_class.configure do |c|
+            c.enable_filter_for_log_levels = initial
+          end
+        end
+      end
+    end
   end
 end

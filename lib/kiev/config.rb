@@ -75,6 +75,16 @@ module Kiev
       end
     end
 
+    SUPPORTED_LOG_LEVELS = {
+      debug: ::Logger::DEBUG,
+      info: ::Logger::INFO,
+      warn: ::Logger::WARN,
+      error: ::Logger::ERROR,
+      fatal: ::Logger::FATAL
+    }.freeze
+
+    private_constant :SUPPORTED_LOG_LEVELS
+
     attr_accessor :app,
                   :log_request_condition,
                   :log_request_error_condition,
@@ -89,10 +99,12 @@ module Kiev
 
     attr_reader :development_mode,
                 :logger,
+                :log_level,
                 :http_propagated_fields,
                 :jobs_propagated_fields,
                 :all_http_propagated_fields, # for internal use
-                :all_jobs_propagated_fields # for internal use
+                :all_jobs_propagated_fields, # for internal use
+                :enable_filter_for_log_levels
 
     def initialize
       @log_request_condition = DEFAULT_LOG_REQUEST_CONDITION
@@ -105,9 +117,10 @@ module Kiev
       @development_mode = false
       @ignored_rack_exceptions = DEFAULT_IGNORED_RACK_EXCEPTIONS.dup
       @logger = Kiev::Logger.new(STDOUT)
-      @log_level = nil
+      @log_level = default_log_level
       @persistent_log_fields = []
       @pre_rack_hook = DEFAULT_PRE_RACK_HOOK
+      @enable_filter_for_log_levels = supported_log_levels.values
       self.propagated_fields = {}
       update_logger_settings
     end
@@ -138,8 +151,16 @@ module Kiev
     end
 
     def log_level=(value)
+      raise ArgumentError, "Unsupported log level #{value}" unless supported_log_level?(value)
+
       @log_level = value
       update_logger_settings
+    end
+
+    def enable_filter_for_log_levels=(log_levels)
+      raise ArgumentError, "Unsupported log levels" unless array_with_log_levels?(log_levels)
+
+      @enable_filter_for_log_levels = log_levels
     end
 
     def development_mode=(value)
@@ -147,11 +168,15 @@ module Kiev
       update_logger_settings
     end
 
+    def supported_log_levels
+      SUPPORTED_LOG_LEVELS
+    end
+
     private
 
     def update_logger_settings
       @logger.formatter = formatter
-      @logger.level = @log_level || default_log_level
+      @logger.level = @log_level
     end
 
     def formatter
@@ -160,6 +185,16 @@ module Kiev
 
     def default_log_level
       development_mode ? ::Logger::DEBUG : ::Logger::INFO
+    end
+
+    def array_with_log_levels?(log_levels)
+      return false unless log_levels.is_a?(Array)
+
+      log_levels.all? { |level| supported_log_level?(level) }
+    end
+
+    def supported_log_level?(log_level)
+      supported_log_levels.value?(log_level)
     end
   end
 end
