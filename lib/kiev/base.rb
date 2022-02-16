@@ -13,33 +13,38 @@ require_relative "config"
 require_relative "util"
 require_relative "subrequest_helper"
 require_relative "hanami"
+require "forwardable"
+require "logger"
 
 module Kiev
   class << self
+    extend Forwardable
+
+    def_delegators :config,
+                   :logger,
+                   :filtered_params,
+                   :ignored_params,
+                   :log_level,
+                   :enable_filter_for_log_levels
+
     EMPTY_OBJ = {}.freeze
 
     def configure
       yield(Config.instance)
     end
 
-    def logger
-      Config.instance.logger
+    def config
+      Config.instance
     end
 
-    def filtered_params
-      Config.instance.filtered_params
+    def event(log_name, data = EMPTY_OBJ, severity = log_level)
+      logger.log(severity, logged_data(data), log_name)
     end
 
-    def ignored_params
-      Config.instance.ignored_params
-    end
-
-    def event(log_name, data = EMPTY_OBJ)
-      logger.log(
-        ::Logger::Severity::INFO,
-        ParamFilter.filter(data, filtered_params, ignored_params),
-        log_name
-      )
+    Config.instance.supported_log_levels.each_pair do |key, value|
+      define_method(key) do |log_name, data = EMPTY_OBJ|
+        event(log_name, data, value)
+      end
     end
 
     def []=(name, value)
@@ -63,5 +68,13 @@ module Kiev
     end
 
     alias_method :tracking_id, :request_id
+
+    private
+
+    def logged_data(data)
+      return data unless enable_filter_for_log_levels.include?(log_level)
+
+      ParamFilter.filter(data, filtered_params, ignored_params)
+    end
   end
 end

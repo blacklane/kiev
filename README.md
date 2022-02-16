@@ -176,13 +176,13 @@ Kiev::Kafka.inject_context(headers)
 
 After this operation the headers variable will also include required context for the Kiev logger.
 
-If you have a consumed `Kafka::FetchedMessage` you can extract logger context with: 
+If you have a consumed `Kafka::FetchedMessage` you can extract logger context with:
 
 ```ruby
 Kiev::Kafka.extract_context(message)
 ```
 
-This will work regardless if headers are in HTTP format, e.g. `X-Tracking-Id` or plain field names: `tracking_id`. Plus the `message_key` field will contain the key of processed message. In case you want to log some more fields configure `persistent_log_fields` and `jobs_propagated_fields`.  
+This will work regardless if headers are in HTTP format, e.g. `X-Tracking-Id` or plain field names: `tracking_id`. Plus the `message_key` field will contain the key of processed message. In case you want to log some more fields configure `persistent_log_fields` and `jobs_propagated_fields`.
 
 ### Que
 
@@ -251,7 +251,7 @@ For web requests the Kiev middleware will log the following information by defau
 
 * `request_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4). (currently deprecated in favor of a new name: `tracking_id`)
 
-* `tracking_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4). If not provided the value is seeded from deprecated `request_id`. 
+* `tracking_id` is the correlation ID and will be the same across all requests within a chain of requests. It's represented as a UUID (version 4). If not provided the value is seeded from deprecated `request_id`.
 
 * `request_depth` represents the position of the current request within a chain of requests. It starts with 0.
 
@@ -317,6 +317,11 @@ Kiev.event(:my_event, { some_array: [1, 2, 3] })
 
 # Log other data types (will be available under the `message` key)
 Kiev.event(:my_event, "hello world")
+
+# Log with given severity [debug, info, warn, error, fatal]
+Kiev.info(:my_event)
+Kiev.info(:my_event, { some_array: [1, 2, 3] })
+Kiev.info(:my_event, "hello world")
 ```
 
 However, `Kiev.logger` implements the Ruby `Logger` class, so all the other methods are available as well:
@@ -438,6 +443,28 @@ get "/" do
   "hello world"
 end
 ```
+
+### log_level
+You can specify log level.
+
+```ruby
+Kiev.configure do |config|
+  # One of: 0, 1, 2, 3, 4 (DEBUG, INFO, WARN, ERROR, FATAL)
+  config.log_level = 0
+end
+```
+
+### enable_filter_for_log_levels
+You can specify for which log levels personal identifying information filter will be applied.
+
+```ruby
+Kiev.configure do |config|
+  # [DEBUG, INFO, WARN, ERROR, FATAL]
+  config.enable_filter_for_log_levels = [0, 1, 2, 3, 4]
+end
+```
+
+**By default enabled for all suppported log levels.**
 
 ## nginx
 
