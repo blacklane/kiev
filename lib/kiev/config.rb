@@ -104,7 +104,7 @@ module Kiev
                 :jobs_propagated_fields,
                 :all_http_propagated_fields, # for internal use
                 :all_jobs_propagated_fields, # for internal use
-                :enable_filter_for_log_levels
+                :disable_filter_for_log_levels
 
     def initialize
       @log_request_condition = DEFAULT_LOG_REQUEST_CONDITION
@@ -120,7 +120,7 @@ module Kiev
       @log_level = default_log_level
       @persistent_log_fields = []
       @pre_rack_hook = DEFAULT_PRE_RACK_HOOK
-      @enable_filter_for_log_levels = supported_log_levels.values
+      @disable_filter_for_log_levels = []
       self.propagated_fields = {}
       update_logger_settings
     end
@@ -157,10 +157,10 @@ module Kiev
       update_logger_settings
     end
 
-    def enable_filter_for_log_levels=(log_levels)
+    def disable_filter_for_log_levels=(log_levels)
       raise ArgumentError, "Unsupported log levels" unless array_with_log_levels?(log_levels)
 
-      @enable_filter_for_log_levels = log_levels
+      @disable_filter_for_log_levels = log_levels
     end
 
     def development_mode=(value)
