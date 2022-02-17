@@ -171,14 +171,14 @@ describe Kiev::Config do
     end
   end
 
-  describe "enable_filter_for_log_levels" do
+  describe "disable_filter_for_log_levels" do
     subject { described_class.instance }
 
     context "when unsupported log levels provided" do
       context "when not array" do
         it do
           expect {
-            subject.enable_filter_for_log_levels = 1
+            subject.disable_filter_for_log_levels = 1
           }.to raise_error(ArgumentError, "Unsupported log levels")
         end
       end
@@ -186,7 +186,7 @@ describe Kiev::Config do
       context "with unsupported level" do
         it do
           expect {
-            subject.enable_filter_for_log_levels = [0, 1, 2, 8]
+            subject.disable_filter_for_log_levels = [0, 1, 2, 8]
           }.to raise_error(ArgumentError, "Unsupported log levels")
         end
       end

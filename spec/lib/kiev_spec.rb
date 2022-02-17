@@ -109,16 +109,16 @@ describe Kiev do
 
       context "when diabled for particular log level" do
         it "doesn't filters params" do
-          initial = described_class.enable_filter_for_log_levels
+          initial = described_class.disable_filter_for_log_levels
           described_class.configure do |c|
-            c.enable_filter_for_log_levels = [0, 2, 3, 4]
+            c.disable_filter_for_log_levels = [1]
           end
 
           Kiev.event(:test_one, { credit_card_number: "123" })
           expect(log_first["credit_card_number"]).to eq("123")
 
           described_class.configure do |c|
-            c.enable_filter_for_log_levels = initial
+            c.disable_filter_for_log_levels = initial
           end
         end
       end

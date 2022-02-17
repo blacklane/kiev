@@ -454,13 +454,13 @@ Kiev.configure do |config|
 end
 ```
 
-### enable_filter_for_log_levels
-You can specify for which log levels personal identifying information filter will be applied.
+### disable_filter_for_log_levels
+You can specify for which log levels personal identifying information filter will NOT be applied.
 
 ```ruby
 Kiev.configure do |config|
   # [DEBUG, INFO, WARN, ERROR, FATAL]
-  config.enable_filter_for_log_levels = [0, 1, 2, 3, 4]
+  config.disable_filter_for_log_levels = [0, 1, 2, 3, 4]
 end
 ```
 
