@@ -29,6 +29,9 @@ module Kiev
     def self.filter(content_type, request_body, filtered_params, ignored_params)
       body = request_body.read
       request_body.rewind
+
+      return body unless Kiev.config.filter_enabled?
+
       body_filter = for_content_type(content_type)
       body_filter.call(body, filtered_params, ignored_params)
     end

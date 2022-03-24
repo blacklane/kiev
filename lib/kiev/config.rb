@@ -172,6 +172,10 @@ module Kiev
       SUPPORTED_LOG_LEVELS
     end
 
+    def filter_enabled?
+      !disable_filter_for_log_levels.include?(log_level)
+    end
+
     private
 
     def update_logger_settings
