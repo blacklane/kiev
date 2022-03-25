@@ -72,7 +72,7 @@ module Kiev
     private
 
     def logged_data(data)
-      return data if disable_filter_for_log_levels.include?(log_level)
+      return data unless config.filter_enabled?
 
       ParamFilter.filter(data, filtered_params, ignored_params)
     end
