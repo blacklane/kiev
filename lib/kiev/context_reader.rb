@@ -19,7 +19,7 @@ module Kiev
     end
 
     def tracking_id
-      self[TRACKING_ID] || self[REQUEST_ID] || SecureRandom.uuid
+      presence(self[TRACKING_ID]) || presence(self[REQUEST_ID]) || SecureRandom.uuid
     end
 
     alias_method :request_id, :tracking_id
@@ -43,5 +43,9 @@ module Kiev
     private
 
     attr_reader :subject
+
+    def presence(value)
+      return value if value && !value.empty?
+    end
   end
 end

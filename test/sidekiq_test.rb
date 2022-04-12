@@ -94,6 +94,14 @@ if defined?(Sidekiq)
       assert_nil(Kiev::RequestStore.store[:tracking_id])
     end
 
+    it "server middleware provides a value if existing request_id is an empty string" do
+      run_sidekiq("request_id" => "")
+      refute_empty(log_first["request_id"])
+      refute_empty(log_first["tracking_id"])
+      assert_nil(Kiev::RequestStore.store[:request_id])
+      assert_nil(Kiev::RequestStore.store[:tracking_id])
+    end
+
     it "server middleware generates new request_id each time" do
       run_sidekiq
       run_sidekiq
