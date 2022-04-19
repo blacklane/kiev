@@ -58,6 +58,17 @@ if defined?(Rack)
           expect(Kiev::RequestStore.store[:tracking_id]).to eq("a" * 255)
         end
       end
+
+      context "when there is a X-Request-Id set to an empty string" do
+        before { header("X-Request-Id", "") }
+        it do
+          expect(Kiev::RequestStore.store[:request_id]).to eq(nil)
+          expect(subject.headers["X-Request-Id"]).not_to eq("")
+          expect(subject.headers["X-Tracking-Id"]).not_to eq("")
+          expect(Kiev::RequestStore.store[:request_id]).not_to eq("")
+          expect(Kiev::RequestStore.store[:tracking_id]).not_to eq("")
+        end
+      end
     end
 
     describe "X-Tracking-Id" do
