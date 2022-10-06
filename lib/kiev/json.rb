@@ -99,19 +99,19 @@ module Kiev
       def oj_generate(obj)
         Oj.dump(obj, OJ_OPTIONS)
       rescue Exception
-        FAIL_JSON.dup
+        [FAIL_JSON.dup, obj.inspect, "oj_generate"].join(" - ")
       end
 
       def activesupport_generate(obj)
         ActiveSupport::JSON.encode(obj)
       rescue Exception
-        FAIL_JSON.dup
+        [FAIL_JSON.dup, obj.inspect, "activesupport_generate"].join(" - ")
       end
 
       def json_generate(obj)
         ::JSON.generate(obj, quirks_mode: true)
       rescue Exception
-        FAIL_JSON.dup
+        [FAIL_JSON.dup, obj.inspect, "json_generate"].join(" - ")
       end
     end
   end
