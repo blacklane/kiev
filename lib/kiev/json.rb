@@ -98,8 +98,8 @@ module Kiev
 
       def oj_generate(obj)
         Oj.dump(obj, OJ_OPTIONS)
-      rescue Exception
-        [FAIL_JSON.dup, obj.inspect, "oj_generate"].join(" - ")
+      rescue Exception => e
+        [FAIL_JSON.dup, obj.inspect, "oj_generate", e.message, e.class.name].join(" - ")
       end
 
       def activesupport_generate(obj)
