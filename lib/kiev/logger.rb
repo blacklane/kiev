@@ -40,6 +40,12 @@ module Kiev
         entry[:job_name] = RequestStore.store[:job_name]
         entry[:jid] = RequestStore.store[:jid]
       end
+      if RequestStore.store[:otel_dd_correlation]
+        entry["dd.env"] = RequestStore.store["dd.env"]
+        entry["dd.service"] = RequestStore.store["dd.service"]
+        entry["dd.trace_id"] = RequestStore.store["dd.trace_id"]
+        entry["dd.span_id"] = RequestStore.store["dd.span_id"]
+      end
 
       if !RequestStore.store[:subrequest_count] && %i(request_finished job_finished).include?(log_name)
         entry[:tree_leaf] = true

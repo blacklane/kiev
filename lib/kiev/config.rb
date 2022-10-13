@@ -86,6 +86,7 @@ module Kiev
     private_constant :SUPPORTED_LOG_LEVELS
 
     attr_accessor :app,
+                  :app_env,
                   :log_request_condition,
                   :log_request_error_condition,
                   :log_response_body_condition,
