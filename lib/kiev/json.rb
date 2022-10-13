@@ -98,20 +98,20 @@ module Kiev
 
       def oj_generate(obj)
         Oj.dump(obj, OJ_OPTIONS)
-      rescue Exception => e
-        [FAIL_JSON.dup, obj.inspect, "oj_generate", e.message, e.class.name].join(" - ")
+      rescue Exception
+        FAIL_JSON.dup
       end
 
       def activesupport_generate(obj)
         ActiveSupport::JSON.encode(obj)
       rescue Exception
-        [FAIL_JSON.dup, obj.inspect, "activesupport_generate"].join(" - ")
+        FAIL_JSON.dup
       end
 
       def json_generate(obj)
         ::JSON.generate(obj, quirks_mode: true)
       rescue Exception
-        [FAIL_JSON.dup, obj.inspect, "json_generate"].join(" - ")
+        FAIL_JSON.dup
       end
     end
   end
