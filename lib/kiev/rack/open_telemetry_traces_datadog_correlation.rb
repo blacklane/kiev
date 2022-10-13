@@ -3,6 +3,8 @@
 module Kiev
   module Rack
     class OpenTelemetryTracesDatadogCorrelation
+      # https://docs.datadoghq.com/tracing/other_telemetry/connect_logs_and_traces/opentelemetry/?tab=ruby
+
       def initialize(app)
         @app = app
       end
