@@ -6,7 +6,7 @@ module Kiev
   class Config
     include Singleton
 
-    DEFAULT_LOG_REQUEST_REGEXP = %r{(^(/ping|/health))|(\.(js|css|png|jpg|gif|ico|svg)$)}
+    DEFAULT_LOG_REQUEST_REGEXP = %r{(^(/ping|/health|/live|/ready))|(\.(js|css|png|jpg|gif|ico|svg)$)}
     private_constant :DEFAULT_LOG_REQUEST_REGEXP
 
     DEFAULT_LOG_REQUEST_CONDITION = proc do |request, _response|

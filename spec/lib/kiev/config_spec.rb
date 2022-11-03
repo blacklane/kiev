@@ -70,6 +70,14 @@ describe Kiev::Config do
       let(:request) { OpenStruct.new(path: "/ping") }
       it { expect(subject.call(request, response)).to eq(false) }
     end
+    context "ready request" do
+      let(:request) { OpenStruct.new(path: "/ready") }
+      it { expect(subject.call(request, response)).to eq(false) }
+    end
+    context "live request" do
+      let(:request) { OpenStruct.new(path: "/live") }
+      it { expect(subject.call(request, response)).to eq(false) }
+    end
     context "/something/ping request" do
       let(:request) { OpenStruct.new(path: "/something/ping") }
       it { expect(subject.call(request, response)).to eq(true) }
