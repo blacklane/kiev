@@ -56,7 +56,7 @@ if defined?(Sinatra)
       post("/post_file", some_data: "abc", "file" => file)
       assert_equal(
         "{\"some_data\":\"abc\",\"file\":{\"filename\":\"test.txt\",\"type\":\"image/jpeg\",\"name\":\"file\"," \
-        "\"head\":\"Content-Disposition: form-data; name=\\\"file\\\"; filename=\\\"test.txt\\\"\\r\\n" \
+        "\"head\":\"content-disposition: form-data; name=\\\"file\\\"; filename=\\\"test.txt\\\"\\r\\n" \
         "content-Type: image/jpeg\\r\\ncontent-Length: 3308\\r\\n\"}}",
         log_first["params"]
       )
