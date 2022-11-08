@@ -385,7 +385,7 @@ end
 
 ### log_request_condition
 
-By default, Kiev doesn't log requests to `/ping` or `/health` or requests to assets.
+By default, Kiev doesn't log requests to `/ping`, `/health`, `/live` or `/ready` or requests to assets.
 
 You can override this behaviour via the `log_request_condition` option, which should be a `proc` returning a `boolean`:
 
