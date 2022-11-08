@@ -57,7 +57,7 @@ if defined?(Sinatra)
       assert_equal(
         "{\"some_data\":\"abc\",\"file\":{\"filename\":\"test.txt\",\"type\":\"image/jpeg\",\"name\":\"file\"," \
         "\"head\":\"content-disposition: form-data; name=\\\"file\\\"; filename=\\\"test.txt\\\"\\r\\n" \
-        "content-Type: image/jpeg\\r\\ncontent-Length: 3308\\r\\n\"}}",
+        "content-type: image/jpeg\\r\\ncontent-length: 3308\\r\\n\"}}",
         log_first["params"]
       )
     end
