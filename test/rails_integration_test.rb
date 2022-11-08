@@ -56,8 +56,8 @@ if defined?(Rails)
       assert_not_nil(log_first)
       assert_equal(
         "{\"some_data\":\"abc\",\"file\":{\"original_filename\":\"test.txt\",\"content_type\":\"image/jpeg\","\
-        "\"headers\":\"Content-Disposition: form-data; name=\\\"file\\\"; filename=\\\"test.txt\\\"\\r\\n"\
-        "Content-Type: image/jpeg\\r\\nContent-Length: 3308\\r\\n\"}}",
+        "\"headers\":\"content-disposition: form-data; name=\\\"file\\\"; filename=\\\"test.txt\\\"\\r\\n"\
+        "content-type: image/jpeg\\r\\ncontent-length: 3308\\r\\n\"}}",
         log_first["params"]
       )
     end
