@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['2.5.1', '2.7.2', '2.6.5']
+        ruby: ['3.2.2']
         gemfile:
           - gemfiles/ruby_kafka.gemfile
           - gemfiles/que_0.12.2.gemfile
           - gemfiles/que_0.12.3.gemfile
-          - gemfiles/rails_5.2.gemfile
+          - gemfiles/rails_7.0.gemfile
           - gemfiles/shoryuken_4.0.gemfile
           - gemfiles/sidekiq_4.2.gemfile
           - gemfiles/sinatra_1.4.gemfile
@@ -34,7 +34,7 @@ jobs:
         include:
           - os: ubuntu
             ruby-version: ruby-head
-            gemfile: gemfiles/rails_5.2.gemfile
+            gemfile: gemfiles/rails_7.0.gemfile
             allow_failures: true
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
