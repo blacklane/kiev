@@ -5,7 +5,7 @@ module Kiev
     def self.sanitize(value)
       return unless value
 
-      value.gsub(/[^\w\-]/, "")[0...255]
+      value.gsub(/[^\w-]/, "")[0...255]
     end
 
     def self.to_http(value)
