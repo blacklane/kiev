@@ -50,7 +50,7 @@ module Kiev
     class << self
       def generate(obj)
         case engine
-        when :ok
+        when :oj
           oj_generate(obj)
         when :activesupport
           activesupport_generate(obj)
