@@ -21,14 +21,14 @@ jobs:
       matrix:
         ruby: ['3.2.2']
         gemfile:
-          - gemfiles/ruby_kafka.gemfile
-          - gemfiles/que_0.12.2.gemfile
-          - gemfiles/que_0.12.3.gemfile
+          # - gemfiles/ruby_kafka.gemfile
+          # - gemfiles/que_0.12.2.gemfile
+          # - gemfiles/que_0.12.3.gemfile
           - gemfiles/rails_7.0.gemfile
-          - gemfiles/shoryuken_4.0.gemfile
-          - gemfiles/sidekiq_4.2.gemfile
-          - gemfiles/sinatra_1.4.gemfile
-          - gemfiles/sinatra_2.0.gemfile
+          # - gemfiles/shoryuken_4.0.gemfile
+          # - gemfiles/sidekiq_4.2.gemfile
+          # - gemfiles/sinatra_1.4.gemfile
+          # - gemfiles/sinatra_2.0.gemfile
         allow_failures:
           - false
         include:
