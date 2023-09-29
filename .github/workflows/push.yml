@@ -21,7 +21,7 @@ jobs:
       matrix:
         ruby: ['3.2.2']
         gemfile:
-          # - gemfiles/ruby_kafka.gemfile
+          - gemfiles/ruby_kafka.gemfile
           # - gemfiles/que_0.12.2.gemfile
           # - gemfiles/que_0.12.3.gemfile
           - gemfiles/rails_7.0.gemfile

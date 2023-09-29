@@ -160,7 +160,7 @@ if defined?(::Shoryuken)
           end
         end
 
-        def sqs_msg_from(**attrs)
+        def sqs_msg_from(attrs)
           double(
             Shoryuken::Message,
             message_id: SecureRandom.uuid,
