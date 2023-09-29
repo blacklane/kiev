@@ -25,8 +25,7 @@ jobs:
           - gemfiles/rails_7.0.gemfile
           - gemfiles/shoryuken_6.0.gemfile
           - gemfiles/sidekiq_5.0.gemfile
-          # - gemfiles/sinatra_1.4.gemfile
-          # - gemfiles/sinatra_2.0.gemfile
+          - gemfiles/sinatra_2.2.gemfile
         allow_failures:
           - false
         include:
