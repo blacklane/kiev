@@ -3,7 +3,7 @@
 require_relative "helper"
 
 if defined?(Sidekiq)
-  class SidekiqTest < MiniTest::Spec
+  class SidekiqTest < Minitest::Spec
     include LogHelper
 
     class CustomWorker
@@ -37,6 +37,7 @@ if defined?(Sidekiq)
     def run_sidekiq(opts = {})
       msg = Sidekiq.dump_json({ "class" => CustomWorker.to_s, "args" => ["test"] }.merge(opts))
       boss = Minitest::Mock.new
+      boss.expect(:options, { queues: ["default"] }, [])
       boss.expect(:options, { queues: ["default"] }, [])
       boss.expect(:options, { queues: ["default"] }, [])
       processor = Sidekiq::Processor.new(boss)
