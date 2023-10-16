@@ -124,5 +124,10 @@ module Kiev
         @logger.formatter = previous_logger.formatter
       end
     end
+
+    def broadcast_to(_)
+      # https://github.com/rails/rails/releases/tag/v7.1.0
+      # Not Supported
+    end
   end
 end
