@@ -126,8 +126,8 @@ module Kiev
     end
 
     def broadcast_to(_)
-      # https://github.com/rails/rails/releases/tag/v7.1.0
       # Not Supported
+      # https://github.com/rails/rails/releases/tag/v7.1.0
     end
   end
 end

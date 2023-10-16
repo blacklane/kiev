@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem "oj"
 
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 7.1"
 gem "sqlite3", "1.6"
 
 gem "combustion"
