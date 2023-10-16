@@ -44,13 +44,13 @@ module Kiev
           Kiev.event(
             :request_finished,
             form_data(
-              began_at: began_at,
-              env: env,
-              request: request,
-              response: response,
-              status: status,
-              body: body,
-              exception: exception
+              began_at:,
+              env:,
+              request:,
+              response:,
+              status:,
+              body:,
+              exception:
             )
           )
         end
@@ -90,7 +90,7 @@ module Kiev
           params: params.empty? ? nil : params, # env[Rack::QUERY_STRING],
           ip: request.ip, # split_http_x_forwarded_headers(env) || env["REMOTE_ADDR"]
           user_agent: env[HTTP_USER_AGENT],
-          status: status,
+          status:,
           request_duration: ((Time.now.to_f - began_at) * 1000).round(3),
           route: extract_route(env)
         }

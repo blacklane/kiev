@@ -2,7 +2,7 @@ inherit_from:
   - https://raw.githubusercontent.com/blacklane/rubocop/master/rubocop.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.2
   Exclude:
     - test/rails_app/**/*.rb # auto-generated
     - spec/**/*.rb

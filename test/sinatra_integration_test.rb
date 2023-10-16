@@ -3,7 +3,7 @@
 require_relative "helper"
 
 if defined?(Sinatra)
-  class SinatraIntegrationTest < MiniTest::Test
+  class SinatraIntegrationTest < Minitest::Test
     include Rack::Test::Methods
     include LogHelper
 
@@ -178,8 +178,7 @@ if defined?(Sinatra)
         )
       else
         assert_equal(
-          "GET (?-mix:\\/resource\\/" \
-            "(?<uuid>([a-z0-9]){8}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){12})\\/test)",
+          "GET \\/resource\\/(?<uuid>([a-z0-9]){8}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){12})\\/test",
           log_first["route"]
         )
       end
@@ -195,8 +194,8 @@ if defined?(Sinatra)
         )
       else
         assert_equal(
-          "GET (?-mix:^(?-mix:(?-mix:\\/admin)(?-mix:\\/resource\\/" \
-            "(?<uuid>([a-z0-9]){8}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){12})\\/test))$)",
+          "GET (sinatra:\"/admin\" + regular:\"\\\\/resource\\\\/" \
+          "(?<uuid>([a-z0-9]){8}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){4}-([a-z0-9]){12})\\\\/test\")",
           log_first["route"]
         )
       end
@@ -219,7 +218,7 @@ if defined?(Sinatra)
     end
   end
 
-  class SinatraIntegrationTest2 < MiniTest::Test
+  class SinatraIntegrationTest2 < Minitest::Test
     include Rack::Test::Methods
     include LogHelper
 

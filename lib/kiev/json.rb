@@ -49,11 +49,12 @@ module Kiev
 
     class << self
       def generate(obj)
-        if engine == :oj
+        case engine
+        when :oj
           oj_generate(obj)
-        elsif engine == :activesupport
+        when :activesupport
           activesupport_generate(obj)
-        elsif engine == :json
+        when :json
           json_generate(obj)
         else
           NO_JSON.dup

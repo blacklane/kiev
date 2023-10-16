@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "request_store"
-require "ruby_dig"
 require_relative "request_store"
 require_relative "request_logger"
 require_relative "logger"
