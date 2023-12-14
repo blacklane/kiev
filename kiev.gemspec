@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Distributed logging to JSON integrated with various Ruby frameworks and tools"
   spec.description   = "Kiev is a logging tool aimed at distributed environments. It logs to JSON, while providing "\
                         "human-readable output in development mode. It integrates nicely with Rails, Sinatra and other"\
-                        " Rack-based frameworks, Sidekiq, Que, HTTParty, Her and other Faraday-based HTTP clients."
+                        " Rack-based frameworks, Sidekiq, HTTParty, Her and other Faraday-based HTTP clients."
   spec.homepage      = "https://github.com/blacklane/kiev"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }

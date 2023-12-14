@@ -6,7 +6,6 @@ Kiev is a comprehensive logging library aimed at covering a wide range of framew
 - Sinatra
 - Rack and other Rack-based frameworks
 - Sidekiq
-- Que
 - Shoryuken
 - Her and other Faraday-based libraries
 - HTTParty
@@ -183,18 +182,6 @@ Kiev::Kafka.extract_context(message)
 ```
 
 This will work regardless if headers are in HTTP format, e.g. `X-Tracking-Id` or plain field names: `tracking_id`. Plus the `message_key` field will contain the key of processed message. In case you want to log some more fields configure `persistent_log_fields` and `jobs_propagated_fields`.
-
-### Que
-
-Add the following lines to your initializer code:
-
-```ruby
-require "kiev/que/job"
-
-class MyJob < Kiev::Que::Job
-  ...
-end
-```
 
 ### Her
 
@@ -594,14 +581,4 @@ Run tests:
 
 ```sh
 bundle exec rake
-```
-
-Run tests for different rubies, frameworks and framework versions:
-
-```sh
-# Create a Postgres test database for Que
-createdb que_test
-
-# Run the tests (replace myuser with your username)
-DATABASE_URL=postgres://myuser:@localhost/que_test bundle exec wwtd
 ```
