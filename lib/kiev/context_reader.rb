@@ -45,7 +45,7 @@ module Kiev
     attr_reader :subject
 
     def presence(value)
-      return value if value && !value.empty?
+      value if value && !value.empty?
     end
   end
 end

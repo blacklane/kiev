@@ -2,6 +2,7 @@
 
 class RootController < ActionController::Base
   def show
+    params # evaluate params
     respond_to do |format|
       format.html { render html: "body" }
       format.json { render json: "{\"body\":true}" }

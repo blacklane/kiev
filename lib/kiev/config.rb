@@ -116,7 +116,7 @@ module Kiev
       @disable_default_logger = true
       @development_mode = false
       @ignored_rack_exceptions = DEFAULT_IGNORED_RACK_EXCEPTIONS.dup
-      @logger = Kiev::Logger.new(STDOUT)
+      @logger = Kiev::Logger.new($stdout)
       @log_level = default_log_level
       @persistent_log_fields = []
       @pre_rack_hook = DEFAULT_PRE_RACK_HOOK
@@ -128,7 +128,7 @@ module Kiev
     def http_propagated_fields=(value)
       @all_http_propagated_fields = DEFAULT_HTTP_PROPAGATED_FIELDS.merge(value)
       @http_propagated_fields = @all_http_propagated_fields.dup
-      DEFAULT_HTTP_PROPAGATED_FIELDS.keys.each do |key|
+      DEFAULT_HTTP_PROPAGATED_FIELDS.each_key do |key|
         @http_propagated_fields.delete(key)
       end
       @http_propagated_fields.freeze

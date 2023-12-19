@@ -31,10 +31,10 @@ module Kiev
 
       def field_value(key, synchronous)
         if key == :tree_path
-          subrequest_path(synchronous: synchronous)
+          subrequest_path(synchronous:)
         else
           request_store = Kiev::RequestStore.store
-          request_store.dig(key) || request_store.dig(:payload, key)
+          request_store[key] || request_store.dig(:payload, key)
         end
       end
 

@@ -7,7 +7,7 @@ module Kiev
         include Kiev::RequestLogger::Mixin
 
         def call(_worker, _queue, _message, body, &block)
-          wrap_request_logger(:job_finished, body: body, &block)
+          wrap_request_logger(:job_finished, body:, &block)
         end
       end
     end

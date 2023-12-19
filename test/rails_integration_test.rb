@@ -190,7 +190,7 @@ if defined?(Rails)
 
     def test_event
       get("/test_event")
-      assert_equal("{\"id\":1000,\"name\":\"Jane\",\"money\":\"0.333333333333333333\"}", log_first["some_data"])
+      assert_equal("{\"id\":1000,\"name\":\"Jane\",\"money\":\"0.333333333333333333333333333333333333\"}", log_first["some_data"])
       assert_equal("test_event", log_first["log_name"])
     end
   end
