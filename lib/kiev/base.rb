@@ -66,6 +66,10 @@ module Kiev
       RequestStore.store[:tracking_id]
     end
 
+    def trace_id
+      RequestStore.store[:trace_id]
+    end
+
     alias_method :tracking_id, :request_id
 
     private

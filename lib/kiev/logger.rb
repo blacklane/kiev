@@ -28,7 +28,8 @@ module Kiev
           tracking_id: RequestStore.store[:tracking_id],
           request_id: RequestStore.store[:request_id],
           request_depth: RequestStore.store[:request_depth],
-          tree_path: RequestStore.store[:tree_path]
+          tree_path: RequestStore.store[:tree_path],
+          trace_id: RequestStore.store[:trace_id]
         }
 
       # data required to restore source of log entry
