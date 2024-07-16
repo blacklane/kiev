@@ -3,6 +3,7 @@
 require_relative "base"
 require_relative "rack/request_logger"
 require_relative "rack/request_id"
+require_relative "rack/event_handler" if defined?(Rack::Events)
 require_relative "rack/store_request_details"
 require_relative "rack/silence_action_dispatch_logger"
 require_relative "../ext/rack/common_logger"

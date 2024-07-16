@@ -7,6 +7,9 @@ gem "oj"
 gem "rails", "~> 7.1"
 gem "sqlite3", "1.6"
 
+gem "opentelemetry-sdk"
+gem "opentelemetry-instrumentation-rails"
+
 gem "combustion"
 gem "rspec", require: false
 gem "rspec-rails", require: false

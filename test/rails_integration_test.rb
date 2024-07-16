@@ -40,6 +40,13 @@ if defined?(Rails)
       assert_equal(1, log_first["request_depth"])
     end
 
+    def test_trace_and_span_id
+      get("/")
+
+      assert_not_nil(log_first["dd.trace_id"])
+      assert_not_nil(log_first["dd.span_id"])
+    end
+
     def test_special_field
       post("/", params: "", headers: { "Special-Field" => "special" })
       assert_equal("special", log_first["special_field"])

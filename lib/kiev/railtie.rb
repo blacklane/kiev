@@ -9,6 +9,8 @@ module Kiev
     initializer("kiev.insert_middleware") do |app|
       app.config.middleware.insert_after(::RequestStore::Middleware, Kiev::Rack::RequestId)
       app.config.middleware.insert_after(Kiev::Rack::RequestId, Kiev::Rack::StoreRequestDetails)
+      app.config.middleware.insert_after(Kiev::Rack::StoreRequestDetails, ::Rack::Events,
+                                         [Kiev::Rack::EventHandler.new])
       app.config.middleware.insert_after(ActionDispatch::ShowExceptions, Kiev::Rack::RequestLogger)
     end
 
