@@ -16,6 +16,7 @@ module Kiev
       base.use(Kiev::Rack::RequestLogger)
       base.use(Kiev::Rack::StoreRequestDetails)
       base.use(Kiev::Rack::RequestId)
+      base.use(::Rack::Events, [Kiev::Rack::EventHandler.new])
     end
   end
 end

@@ -95,7 +95,8 @@ module Kiev
                   :ignored_rack_exceptions,
                   :disable_default_logger,
                   :persistent_log_fields,
-                  :pre_rack_hook
+                  :pre_rack_hook,
+                  :disable_rack_request_instrumentation
 
     attr_reader :development_mode,
                 :logger,
@@ -121,6 +122,7 @@ module Kiev
       @persistent_log_fields = []
       @pre_rack_hook = DEFAULT_PRE_RACK_HOOK
       @disable_filter_for_log_levels = []
+      @disable_rack_request_instrumentation = false
       self.propagated_fields = {}
       update_logger_settings
     end

@@ -15,6 +15,8 @@ module Kiev
       end
 
       def call(env)
+        return @app.call(env) if Config.instance.disable_rack_request_instrumentation
+
         rescued_exception = nil
         began_at = Time.now.to_f
 

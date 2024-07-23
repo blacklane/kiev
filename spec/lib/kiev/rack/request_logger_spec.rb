@@ -32,6 +32,20 @@ if defined?(Rack)
       }.merge(options)]
     end
 
+    context "when disable_rack_request_instrumentation is true" do
+      before do
+        Kiev::Config.instance.disable_rack_request_instrumentation = true
+      end
+
+      after do
+        Kiev::Config.instance.disable_rack_request_instrumentation = false
+      end
+
+      it "does not log request" do
+        expect(subject).to_not have_received(:event)
+      end
+    end
+
     context "200 response" do
       it "logs request" do
         expect(subject).to have_received(:event).with(*request_finished)
