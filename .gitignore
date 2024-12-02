@@ -8,4 +8,6 @@
 /pkg/
 /spec/reports/
 /tmp/
+.idea
+.vscode
 .rubocop-http*
