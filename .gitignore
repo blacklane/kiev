@@ -8,4 +8,5 @@
 /pkg/
 /spec/reports/
 /tmp/
+.idea
 .rubocop-http*
