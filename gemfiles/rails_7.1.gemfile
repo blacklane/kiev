@@ -14,5 +14,6 @@ gem "combustion"
 gem "rspec", require: false
 gem "rspec-rails", require: false
 gem "minitest-reporters", require: false
+gem "rexml", "3.3.9"
 
 gemspec path: "../"
