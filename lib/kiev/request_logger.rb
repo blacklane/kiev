@@ -11,7 +11,7 @@ module Kiev
         error = nil
 
         begin
-          return_value = yield
+          yield
         rescue StandardError => e
           error = e
         end
@@ -28,8 +28,6 @@ module Kiev
           Kiev.event(event, data)
         ensure
           raise error if error
-
-          return_value
         end
       end
     end
