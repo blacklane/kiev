@@ -14,6 +14,6 @@ gem "activemodel", "6"
 gem "her", "1.1.1"
 # We need to do it, since her gem doesn't lock upper boundry
 # https://github.com/remi/her/blob/master/her.gemspec#L26
-gem "faraday"
+gem "faraday", "~> 1.9.3"
 
 gemspec path: "../"
