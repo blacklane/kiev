@@ -30,6 +30,8 @@ module Kiev
         acc[key] =
           if filtered_params.include?(key.to_s) && !value.is_a?(Hash)
             FILTERED
+          elsif value.is_a?(Array)
+            value.map { |inner_val| call(inner_val) }
           elsif value.is_a?(Hash)
             call(value)
           else

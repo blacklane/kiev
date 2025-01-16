@@ -16,6 +16,11 @@ describe Kiev::ParamFilter do
       expect(described_class.filter({ "u" => { "password" => "password" } }, filtered, ignored)).to eq(expected)
     end
 
+    it "filters nested array param" do
+      expected = { "foo" => { "bar" => [{ "password" => "[FILTERED]" } ] } }
+      expect(described_class.filter({ "foo" => { "bar" => [{ "password" => "password" }] } }, filtered, ignored)).to eq(expected)
+    end
+
     it "filters only leafs" do
       input = { "token" => { "token" => "token", "type" => "type" } }
       expected = { "token" => { "token" => "[FILTERED]", "type" => "type" } }
