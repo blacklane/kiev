@@ -2,7 +2,7 @@
 
 require_relative "helper"
 
-class HerExtTest < MiniTest::Test
+class HerExtTest < Minitest::Test
   if defined?(Faraday)
     def conn
       Faraday::Connection.new("http://example.net/") do |builder|

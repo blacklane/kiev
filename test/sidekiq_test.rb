@@ -3,7 +3,7 @@
 require_relative "helper"
 
 if defined?(Sidekiq)
-  class SidekiqTest < MiniTest::Spec
+  class SidekiqTest < Minitest::Spec
     include LogHelper
 
     class CustomWorker
