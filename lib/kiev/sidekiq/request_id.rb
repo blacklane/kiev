@@ -7,7 +7,7 @@ require "kiev/context_reader"
 module Kiev
   module Sidekiq
     class RequestId
-      include Sidekiq::ServerMiddleware if defined?(::Sidekiq::ServerMiddleware)
+      include ::Sidekiq::ServerMiddleware if defined?(::Sidekiq::ServerMiddleware)
       include Kiev::RequestId::Mixin
 
       def call(_worker, job, _queue, &block)

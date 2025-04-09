@@ -3,7 +3,7 @@
 module Kiev
   module Sidekiq
     class StoreRequestDetails
-      include Sidekiq::ServerMiddleware if defined?(::Sidekiq::ServerMiddleware)
+      include ::Sidekiq::ServerMiddleware if defined?(::Sidekiq::ServerMiddleware)
 
       JID = "jid"
       WRAPPED = "wrapped"
