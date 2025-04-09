@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['2.5.1', '2.7.2', '2.6.5']
+        ruby: ['2.7.8', '3.0.6']
         gemfile:
           - gemfiles/ruby_kafka.gemfile
           - gemfiles/que_0.12.2.gemfile
