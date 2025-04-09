@@ -3,6 +3,8 @@
 module Kiev
   module Sidekiq
     class StoreRequestDetails
+      include Sidekiq::ServerMiddleware
+
       JID = "jid"
       WRAPPED = "wrapped"
 
