@@ -3,7 +3,7 @@
 module Kiev
   module Sidekiq
     class RequestLogger
-      include Sidekiq::ServerMiddleware
+      include Sidekiq::ServerMiddleware if defined?(::Sidekiq::ServerMiddleware)
       include Kiev::RequestLogger::Mixin
 
       ARGS = "args"

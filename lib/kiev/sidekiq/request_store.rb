@@ -3,7 +3,7 @@
 module Kiev
   module Sidekiq
     class RequestStore
-      include Sidekiq::ServerMiddleware
+      include Sidekiq::ServerMiddleware if defined?(::Sidekiq::ServerMiddleware)
       include Kiev::RequestStore::Mixin
 
       def call(_worker, _job, _queue, &block)
