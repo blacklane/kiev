@@ -19,16 +19,33 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['2.5.1', '2.7.2', '2.6.5']
+        ruby:
+          - '2.5.1'
+          - '2.7.2'
+          - '2.6.5'
+          - '3.0'
+          - '3.1'
         gemfile:
           - gemfiles/ruby_kafka.gemfile
           - gemfiles/que_0.12.2.gemfile
           - gemfiles/que_0.12.3.gemfile
           - gemfiles/rails_5.2.gemfile
+          - gemfiles/rails_6.0.gemfile
           - gemfiles/shoryuken_4.0.gemfile
           - gemfiles/sidekiq_4.2.gemfile
+          - gemfiles/sidekiq_5.2.gemfile
           - gemfiles/sinatra_1.4.gemfile
           - gemfiles/sinatra_2.0.gemfile
+        exclude:
+          # Some old versions of rails / sinatra don't work with Ruby 3
+            - { ruby: '3.0', gemfile: gemfiles/rails_5.2.gemfile }
+            - { ruby: '3.0', gemfile: gemfiles/sinatra_1.4.gemfile }
+            - { ruby: '3.0', gemfile: gemfiles/sinatra_2.0.gemfile }
+            - { ruby: '3.0', gemfile: gemfiles/shoryuken_4.0.gemfile }
+            - { ruby: '3.1', gemfile: gemfiles/rails_5.2.gemfile }
+            - { ruby: '3.1', gemfile: gemfiles/sinatra_1.4.gemfile }
+            - { ruby: '3.1', gemfile: gemfiles/sinatra_2.0.gemfile }
+            - { ruby: '3.1', gemfile: gemfiles/shoryuken_4.0.gemfile }
         allow_failures:
           - false
         include:
@@ -68,10 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
-        # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-        # change this to (see https://github.com/ruby/setup-ruby#versioning):
-        # uses: ruby/setup-ruby@v1
-        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically

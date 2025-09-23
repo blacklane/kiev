@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "logger"
 require "bundler"
 require "delegate"
 
@@ -109,10 +110,25 @@ if defined?(Sidekiq)
     # so we configure server_middleware for **client**
     Kiev::Sidekiq.enable_server_middleware(config)
   end
+
+  Sidekiq.configure_server do |config|
+    config.redis = { url: REDIS_URL }
+    Kiev::Sidekiq.enable_server_middleware(config)
+  end
+
 end
 
 begin
   require "faraday"
 rescue LoadError
   puts "No Faraday"
+end
+
+begin
+  require "bigdecimal"
+  # Ensure consistent BigDecimal string output across environments
+  # for deterministic tests
+  BigDecimal.limit(18) if BigDecimal.respond_to?(:limit)
+rescue LoadError
+  # BigDecimal may not be present in some environments; ignore
 end

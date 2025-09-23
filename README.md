@@ -425,6 +425,29 @@ Kiev.configure do |config|
 end
 ```
 
+### eager_parameter_parsing
+
+Rails 6 removed the old ParamsParser middleware, which means JSON/XML request bodies are no longer eagerly parsed. As a result, malformed payloads often won’t raise errors until something touches `params`.
+
+Kiev can restore the pre-Rails-6 behavior (fail fast on malformed payloads) by eagerly parsing JSON/XML before your app is called. This is enabled by default when Rails is present.
+
+- Default: true if Rails is defined; false otherwise.
+- When enabled, Kiev will attempt to parse JSON/XML bodies and return a 400 for malformed payloads, avoiding late failures.
+- Kiev rewinds the rack input stream after pre-parsing, so downstream code (e.g., controllers) can still read the raw body safely.
+
+Example:
+
+  Kiev.configure do |config|
+    # Enable or disable eager parsing of JSON/XML request bodies
+    config.eager_parameter_parsing = true   # default when Rails is present
+    # or
+    config.eager_parameter_parsing = false  # disable if you prefer lazy parsing
+  end
+
+Notes:
+- Eager parsing currently applies to `application/json`, `text/json`, `application/xml`, and `text/xml` content types.
+- If your API uses vendor-specific types (e.g., `application/vnd.api+json`), you can keep eager parsing disabled or extend the content type check in your application if needed.
+
 ### persistent_log_fields
 
 If you need to log some data for every event in the session (e.g. the user ID), you can do this via the `persistent_log_fields` option.

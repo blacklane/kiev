@@ -36,6 +36,19 @@ describe Kiev do
       disable_log_tracking
     end
 
+
+    it "honors explicit severity argument" do
+      Kiev.event(:test_warn, { foo: "bar" }, ::Logger::WARN)
+      expect(log_first["level"]).to eq("WARN")
+      expect(log_first["log_name"]).to eq("test_warn")
+
+      reset_logs
+
+      Kiev.event(:test_fatal, { foo: "bar" }, ::Logger::FATAL)
+      expect(log_first["level"]).to eq("FATAL")
+      expect(log_first["log_name"]).to eq("test_fatal")
+    end
+
     it "accepts one argument" do
       Kiev.event(:test_one)
       expect(log_first["log_name"]).to eq("test_one")

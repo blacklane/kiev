@@ -17,4 +17,5 @@ Rails.application.routes.draw do
   post("get_by_id/:id" => "root#get_by_id")
   get("test_event" => "root#test_event")
   get("exception_as_control_flow" => "root#exception_as_control_flow")
+  post("echo_body" => "root#echo_body")
 end
