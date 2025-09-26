@@ -50,7 +50,14 @@ if defined?(Sidekiq)
         end
       end.new(mock)
 
-      processor = Sidekiq::Processor.new(boss, boss.options)
+      processor =
+        if Sidekiq::Processor.instance_method(:initialize).arity == 2
+          # later versions of sidekiq take two arguments...
+          Sidekiq::Processor.new(boss, boss.options)
+        else
+          Sidekiq::Processor.new(boss)
+        end
+
       mock.expect(:processor_done, nil, [processor])
 
       processor.process(Sidekiq::BasicFetch::UnitOfWork.new("queue:default", msg))
