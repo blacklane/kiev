@@ -34,6 +34,7 @@ jobs:
           - gemfiles/shoryuken_4.0.gemfile
           - gemfiles/sidekiq_4.2.gemfile
           - gemfiles/sidekiq_5.2.gemfile
+          - gemfiles/sidekiq_6.4.gemfile
           - gemfiles/sinatra_1.4.gemfile
           - gemfiles/sinatra_2.0.gemfile
         exclude:

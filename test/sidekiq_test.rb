@@ -50,7 +50,7 @@ if defined?(Sidekiq)
         end
       end.new(mock)
 
-      processor = Sidekiq::Processor.new(boss)
+      processor = Sidekiq::Processor.new(boss, boss.options)
       mock.expect(:processor_done, nil, [processor])
 
       processor.process(Sidekiq::BasicFetch::UnitOfWork.new("queue:default", msg))
