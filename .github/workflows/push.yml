@@ -35,6 +35,7 @@ jobs:
           - gemfiles/sidekiq_4.2.gemfile
           - gemfiles/sidekiq_5.2.gemfile
           - gemfiles/sidekiq_6.4.gemfile
+          - gemfiles/sidekiq_6.5.gemfile
           - gemfiles/sinatra_1.4.gemfile
           - gemfiles/sinatra_2.0.gemfile
         exclude:
@@ -59,7 +60,7 @@ jobs:
       ALLOW_FAILURES: "${{ matrix.allow_failures }}"
       REDIS_URL: "redis://localhost:6379/4"
       DATABASE_URL: ${{ (startsWith(matrix.gemfile,'gemfiles/que') && 'postgres://postgres:postgres@localhost:5432/que_test') || 'sqlite3:db/combustion_test.sqlite'}}
-    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' || matrix.gemfile == 'gemfiles/sidekiq_6.5.gemfile' }}
 
     # Service containers to run with `container-job`
     services:
