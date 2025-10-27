@@ -1,0 +1,69 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@2.1.0
+
+executors:
+  ruby-executor:
+    docker:
+      - image: cimg/ruby:3.2.2
+        environment:
+          REDIS_URL: redis://localhost:6379/4
+          DATABASE_URL: sqlite3:db/combustion_test.sqlite
+      - image: cimg/redis:latest
+      - image: cimg/postgres:9.4
+        environment:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: que_test
+
+jobs:
+  test:
+    parameters:
+      gemfile:
+        type: string
+    executor: ruby-executor
+    environment:
+      BUNDLE_GEMFILE: << parameters.gemfile >>
+    steps:
+      - checkout
+
+      - run:
+          name: Wait for Redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+
+      - run:
+          name: Wait for Postgres
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "<< parameters.gemfile >>" }}-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-{{ checksum "<< parameters.gemfile >>" }}-
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "<< parameters.gemfile >>" }}-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Run tests
+          command: bundle exec rake
+
+workflows:
+  version: 2
+  test-all:
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              gemfile:
+                - gemfiles/ruby_kafka.gemfile
+                - gemfiles/rails_7.1.gemfile
+                - gemfiles/shoryuken_6.0.gemfile
+                - gemfiles/sidekiq_5.0.gemfile
+                - gemfiles/sinatra_2.2.gemfile
