@@ -3,6 +3,7 @@
 require_relative "helper"
 
 if defined?(Sidekiq)
+  require_relative "../lib/kiev/sidekiq/testing"
   class SidekiqTest < Minitest::Spec
     include LogHelper
 
@@ -37,7 +38,7 @@ if defined?(Sidekiq)
     def run_sidekiq(opts = {})
       msg = Sidekiq.dump_json({ "class" => CustomWorker.to_s, "args" => ["test"] }.merge(opts))
 
-    # Use a mock to assert processor_done, but let options be called any number of times
+      # Use a mock to assert processor_done, but let options be called any number of times
       mock = Minitest::Mock.new
 
       boss = Class.new do
@@ -50,17 +51,11 @@ if defined?(Sidekiq)
         end
       end.new(mock)
 
-      processor =
-        if Sidekiq::Processor.instance_method(:initialize).arity == 2
-          # later versions of sidekiq take two arguments...
-          Sidekiq::Processor.new(boss, boss.options)
-        else
-          Sidekiq::Processor.new(boss)
-        end
+      processor = Kiev::Sidekiq::Testing.create_processor(boss)
+      mock.expect(:processor_done, nil, [processor]) unless Kiev::Sidekiq::Testing.new_processor_api?
 
-      mock.expect(:processor_done, nil, [processor])
-
-      processor.process(Sidekiq::BasicFetch::UnitOfWork.new("queue:default", msg))
+      work = Kiev::Sidekiq::Testing.create_unit_of_work("queue:default", msg)
+      processor.process(work)
     rescue NoMethodError
       # do nothing, for CustomWorker.undefined_method
     end

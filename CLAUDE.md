@@ -106,6 +106,7 @@ Kiev uses three key concepts for distributed tracing:
 - Client middleware propagates tracking context to enqueued jobs
 - Enable via `Kiev::Sidekiq.enable`
 - Supports Sidekiq 4.2, 5.2, 6.4, 6.5+
+- Testing utilities in `Kiev::Sidekiq::Testing` provide version-compatible helpers for creating processors and unit of work in tests
 
 **Shoryuken (SQS)** (`lib/kiev/shoryuken/`)
 - Middleware for tracking SQS message processing
