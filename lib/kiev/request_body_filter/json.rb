@@ -6,7 +6,7 @@ module Kiev
       def self.call(request_body, filtered_params, ignored_params)
         params = ::JSON.parse(request_body)
         ParamFilter.filter(params, filtered_params, ignored_params)
-      rescue Exception
+      rescue StandardError
         request_body
       end
     end

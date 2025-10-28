@@ -53,15 +53,28 @@ describe Kiev::JSON do
     expect(subject.frozen?).to be(false)
     # Obviously it's not Sidekiq itself, but env setup specific to Sidekiq
     if defined?(::Sidekiq)
-      expect(subject).to eq(
-        "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
-        "\"StringSpecial\":\"\u2028\u2029><&\",\"StringSpecial2\":\"/\",\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\"," \
-        "\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07+00:00\"," \
-        "\"BigDecimal\":\"0.333333333333333333e0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
-        "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
-        "\"OpenStruct\":\"#<OpenStruct country=\\\"Australia\\\", population=20000000>\"," \
-        "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
-      )
+      if defined?(Oj::VERSION) && Oj::VERSION >= "3"
+        expect(subject).to eq(
+          "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
+          "\"StringSpecial\":\"\\u2028\\u2029\\u003e\\u003c\\u0026\",\"StringSpecial2\":\"/\"," \
+          "\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\",\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\"," \
+          "\"DateTime\":\"2012-01-05T23:58:07+00:00\",\"BigDecimal\":\"0.333333333333333333e0\"," \
+          "\"BigDecimalInfinity\":null,\"Float\":0.3333333333333333,\"FloatInfinity\":null,\"Range\":\"1..10\"," \
+          "\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
+          "\"OpenStruct\":\"#\\u003cOpenStruct country=\\\"Australia\\\", population=20000000\\u003e\"," \
+          "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
+        )
+      else
+        expect(subject).to eq(
+          "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \
+          "\"StringSpecial\":\"\u2028\u2029><&\",\"StringSpecial2\":\"/\",\"StringSpecial3\":\"\\\\\\b\\f\\n\\r\\t\"," \
+          "\"Time\":\"2012-01-05 23:58:07 +0900\",\"Date\":\"2012-01-05\",\"DateTime\":\"2012-01-05T23:58:07+00:00\"," \
+          "\"BigDecimal\":\"0.333333333333333333e0\",\"BigDecimalInfinity\":\"Infinity\",\"Float\":0.3333333333333333," \
+          "\"FloatInfinity\":null,\"Range\":\"1..10\",\"Complex\":\"0.3-0.5i\",\"Exception\":\"Exception\"," \
+          "\"OpenStruct\":\"#<OpenStruct country=\\\"Australia\\\", population=20000000>\"," \
+          "\"Rational\":\"5404319552844595/18014398509481984\",\"AsJson\":{\"a\":1}}"
+        )
+      end
     elsif defined?(ActiveSupport::JSON)
       expect(subject).to eq(
         "{\"Regexp\":\"(?-mix:test)\",\"StringChinese\":\"二胡\"," \

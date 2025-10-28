@@ -21,8 +21,12 @@ module Kiev
         request = ::Rack::Request.new(env)
 
         begin
+          # Rails 6 changed when request bodies get parsed. It no longer uses the old ParamsParser middleware to
+          # eagerly parse JSON/XML, so malformed payloads won’t raise until someone actually touches params.
+          eager_parse_request_body(env, request) if Config.instance.eager_parameter_parsing
+
           status, headers, body = @app.call(env)
-        rescue Exception => e
+        rescue StandardError => e
           rescued_exception = e
 
           status = ERROR_STATUS
@@ -137,6 +141,28 @@ module Kiev
           data[:level] = LOG_ERROR
         end
         data
+      end
+
+      def eager_parse_request_body(env, request)
+        return unless defined?(::ActionDispatch::Request)
+        return unless rails_env?(env)
+        return unless parseable_content_type?(request)
+
+        ::ActionDispatch::Request.new(env).request_parameters
+        env["rack.input"].rewind if env["rack.input"].respond_to?(:rewind)
+      end
+
+      def parseable_content_type?(obj)
+        req = obj.is_a?(Hash) ? ::Rack::Request.new(obj) : obj
+        mt = req.media_type
+        mt && %w(application/json text/json application/xml text/xml).include?(mt)
+      end
+
+      def rails_env?(env)
+        env.key?("action_dispatch.request_id") ||
+          env.key?("action_dispatch.routes") ||
+          env.key?("action_dispatch.parameter_parsers") ||
+          env.key?("action_dispatch.request.parameters")
       end
 
       def extract_route(env)

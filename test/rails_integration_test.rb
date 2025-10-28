@@ -193,5 +193,25 @@ if defined?(Rails)
       assert_equal("{\"id\":1000,\"name\":\"Jane\",\"money\":\"0.333333333333333333\"}", log_first["some_data"])
       assert_equal("test_event", log_first["log_name"])
     end
+
+    def test_eager_parameter_parsing_disabled_still_parses_valid_json
+      previous = Kiev::Config.instance.eager_parameter_parsing
+      Kiev::Config.instance.eager_parameter_parsing = false
+
+      json = "{\"some_data\": \"abc\", \"password\": \"secret\", \"utf8\": \"1\"}"
+      post("/", params: json, headers: { "CONTENT_TYPE" => "application/json" })
+
+      assert_equal("{\"some_data\":\"abc\",\"password\":\"[FILTERED]\"}", log_first["params"])
+    ensure
+      Kiev::Config.instance.eager_parameter_parsing = previous
+    end
+  end
+
+  def test_eager_parameter_parsing_rewinds_input
+    json = "{\"hello\":\"world\"}"
+    post("/echo_body", params: json, headers: { "CONTENT_TYPE" => "application/json" })
+
+    # Ensure the raw body is readable after pre-parse
+    assert_equal(json, response.body)
   end
 end

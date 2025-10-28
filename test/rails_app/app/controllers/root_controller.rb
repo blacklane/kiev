@@ -14,7 +14,7 @@ class RootController < ActionController::Base
       format.html do
         params[:file].read
         params[:file].close
-        render text: "body"
+        render inline: "body"
       end
     end
   end
@@ -48,6 +48,10 @@ class RootController < ActionController::Base
 
   def record_not_found
     raise ActiveRecord::RecordNotFound if defined?(ActiveRecord)
+  end
+
+  def echo_body
+    render plain: request.raw_post
   end
 
   def get_by_id

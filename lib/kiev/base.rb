@@ -37,7 +37,8 @@ module Kiev
       Config.instance
     end
 
-    def event(log_name, data = EMPTY_OBJ, severity = log_level)
+    def event(log_name, data = EMPTY_OBJ, severity = nil)
+      severity ||= log_level
       logger.log(severity, logged_data(data), log_name)
     end
 

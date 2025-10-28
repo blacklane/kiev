@@ -3,7 +3,7 @@
 require_relative "helper"
 
 if defined?(Sinatra)
-  class SinatraIntegrationTest < MiniTest::Test
+  class SinatraIntegrationTest < Minitest::Test
     include Rack::Test::Methods
     include LogHelper
 
@@ -219,7 +219,7 @@ if defined?(Sinatra)
     end
   end
 
-  class SinatraIntegrationTest2 < MiniTest::Test
+  class SinatraIntegrationTest2 < Minitest::Test
     include Rack::Test::Methods
     include LogHelper
 

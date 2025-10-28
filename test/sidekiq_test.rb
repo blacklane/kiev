@@ -3,7 +3,8 @@
 require_relative "helper"
 
 if defined?(Sidekiq)
-  class SidekiqTest < MiniTest::Spec
+  require_relative "../lib/kiev/sidekiq/testing"
+  class SidekiqTest < Minitest::Spec
     include LogHelper
 
     class CustomWorker
@@ -36,12 +37,25 @@ if defined?(Sidekiq)
 
     def run_sidekiq(opts = {})
       msg = Sidekiq.dump_json({ "class" => CustomWorker.to_s, "args" => ["test"] }.merge(opts))
-      boss = Minitest::Mock.new
-      boss.expect(:options, { queues: ["default"] }, [])
-      boss.expect(:options, { queues: ["default"] }, [])
-      processor = Sidekiq::Processor.new(boss)
-      boss.expect(:processor_done, nil, [processor])
-      processor.process(Sidekiq::BasicFetch::UnitOfWork.new("queue:default", msg))
+
+      # Use a mock to assert processor_done, but let options be called any number of times
+      mock = Minitest::Mock.new
+
+      boss = Class.new do
+        def initialize(mock) @mock = mock end
+        def options
+          { queues: ["default"] }
+        end
+        def processor_done(processor)
+          @mock.processor_done(processor)
+        end
+      end.new(mock)
+
+      processor = Kiev::Sidekiq::Testing.create_processor(boss)
+      mock.expect(:processor_done, nil, [processor]) unless Kiev::Sidekiq::Testing.new_processor_api?
+
+      work = Kiev::Sidekiq::Testing.create_unit_of_work("queue:default", msg)
+      processor.process(work)
     rescue NoMethodError
       # do nothing, for CustomWorker.undefined_method
     end
