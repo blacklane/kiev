@@ -158,3 +158,12 @@ Kiev uses three key concepts for distributed tracing:
 - LogHelper module provides `logs`, `log_first`, `log_last` helpers for parsing JSON logs
 - Integration tests use real framework instances (Combustion for Rails, test apps for Sinatra)
 - Sidekiq tests handle version differences (6.4 vs 6.5+) where BasicFetch was removed
+
+## Code Originality & Compliance
+
+When writing code, always implement novel solutions: create new code from scratch or import a compliant library.
+Use the `dependency-license-check` skill to verify any library meets our standards before adding it. For complex logic (SQL queries, regex patterns, algorithms), write original implementations tailored to our domain rather than reproducing snippets from external sources with restrictive licensing or use a library that meets our licensing standards.
+
+## Dependency & License Policy
+
+All new dependencies must comply with Blacklane's Open Source Software Policy. **You MUST invoke the `dependency-license-check` skill before adding, installing, or upgrading any dependency. Never add a library without running this check first.** The skill is also used when auditing existing dependencies for compliance. See the `dependency-license-check` skill files for the complete policy, allowed/restricted license matrix, and per-language usage detection rules.
